@@ -48,12 +48,18 @@ namespace survivez.Controllers
 			Vector3 mouseToLocal = (mouseOffset * 200.0f);
 
 			// DebugOverlay.ScreenText(11, $"[Good] Mouse Offset : {lastGoodMouseOffset}");
-			DebugOverlay.ScreenText(10, $"Mouse Offset : {mouseOffset}");
+			// DebugOverlay.ScreenText(10, $"Mouse Offset : {mouseOffset}");
 
 			//var lookOffset = (pawn.Rotation.Forward * (50.0f + zoom));
 			var lookOffset = mouseToLocal;
+			// DebugOverlay.ScreenText(11, $"Look Offset : {lookOffset}");
 
-			var center = pawn.Position + offset + (Vector3.Up * distance) + (pawn.Velocity/3) + lookOffset;
+			var niceFeelOffset = (Vector3.Up * distance);
+			var center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + lookOffset;
+			if ( Pos.IsNaN )
+			{
+				Pos = center;
+			}
 			lastUpdate += Time.Delta;
 			if (nextUpdate < lastUpdate)
 			{
@@ -63,8 +69,9 @@ namespace survivez.Controllers
 			// DebugOverlay.Line( pawn.Position, pawn.Position + lookOffset.WithZ(0), 1f, false );
 
 			Pos = Vector3.Lerp( Pos, center, Time.Delta * lerpSpeed );
-			Rotation lockedRot = Rotation.FromPitch(90.0f);
+			Rotation lockedRot = Rotation.FromPitch(85.0f);
 			Rot = lockedRot;
+			DebugOverlay.ScreenText(12, $"Camera Transform : {Pos} | {Rot}");
 
 			FieldOfView = 90;
 

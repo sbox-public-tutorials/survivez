@@ -14,7 +14,7 @@ namespace survivez.Weapons
         {
             base.Spawn();
 
-            SetModel( "models/survivez/weapons/shotgun/shotgun.vmdl" );
+            SetModel( "Content/models/survivez/weapons/shotgun/shotgun.vmdl" );
         }
 
         public override void AttackPrimary()

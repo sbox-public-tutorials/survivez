@@ -16,7 +16,7 @@ namespace survivez.Weapons
 			base.Spawn();
 
 			Log.Info( "Spawn SMG" );
-			SetModel( "models/survivez/weapons/IA2/IA2.vmdl" );
+			SetModel( "Content/models/survivez/weapons/IA2/IA2.vmdl" );
 		}
 
 		public override void AttackPrimary()

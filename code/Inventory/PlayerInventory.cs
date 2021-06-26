@@ -10,11 +10,6 @@ namespace survivez.Inventory
 		{
 		}
 
-		public void Clear()
-		{
-
-		}
-
 		public override bool CanAdd( Entity entity )
 		{
 			if ( !entity.IsValid() )

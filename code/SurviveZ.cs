@@ -2,9 +2,8 @@
 using Sandbox;
 using survivez.Controllers;
 using survivez.HUD;
-//
-// You don't need to put things in a namespace, but it doesn't hurt.
-//
+using Sandbox.Nav;
+
 namespace survivez
 {
 
@@ -35,6 +34,16 @@ namespace survivez
 				// UI panels. You don't have to create your HUD via an entity,
 				// this just feels like a nice neat way to do it.
 				_ = new SUI();
+
+				// Push the limits...
+				for (var i = 0; i < 50; i++)
+				{
+					NpcTest npc = new NpcTest()
+					{
+						Position = new Vector3(2144.10f + (i * 10.0f), -2256.31f, 4.03f),
+						Steer = new Wander()
+					};
+				}
 
 				Log.Info( "My Gamemode Has Created Serverside!" );
 			}

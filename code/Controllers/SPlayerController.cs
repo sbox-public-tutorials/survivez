@@ -47,7 +47,7 @@ namespace survivez.Controllers
 		{
 			Duck = new Duck( this );
 			Unstuck = new Unstuck( this );
-			Debug = true;
+			// Debug = true;
 		}
 
 		/// <summary>
