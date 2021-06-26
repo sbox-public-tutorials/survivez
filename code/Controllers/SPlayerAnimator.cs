@@ -11,11 +11,7 @@ namespace survivez.Controllers
 
 		public override void Simulate()
 		{
-			// TODO : Find the mouse position, and point to it.
-			//Vector3 mouseOffset = Screen.GetDirection( Mouse.Position ); // Cannot do this, we are in the server.
-
-			var idealRotation = Pawn.Rotation;//Rotation.LookAt( Input.Rotation.Forward.WithZ( 0 ), Vector3.Up );
-			//var idealRotation = Rotation.LookAt( mouseOffset.WithZ( 0 ), Vector3.Up );
+			var idealRotation = Pawn.Rotation;
 
 			// Rotate the body in said rotation...
 			DoRotation( idealRotation );

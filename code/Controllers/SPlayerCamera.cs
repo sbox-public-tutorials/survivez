@@ -55,7 +55,7 @@ namespace survivez.Controllers
 			// DebugOverlay.ScreenText(11, $"Look Offset : {lookOffset}");
 
 			var niceFeelOffset = (Vector3.Up * distance);
-			var center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + lookOffset;
+			var center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + (lookOffset/2);
 			if ( Pos.IsNaN )
 			{
 				Pos = center;
@@ -71,7 +71,7 @@ namespace survivez.Controllers
 			Pos = Vector3.Lerp( Pos, center, Time.Delta * lerpSpeed );
 			Rotation lockedRot = Rotation.FromPitch(85.0f);
 			Rot = lockedRot;
-			DebugOverlay.ScreenText(12, $"Camera Transform : {Pos} | {Rot}");
+			// DebugOverlay.ScreenText(12, $"Camera Transform : {Pos} | {Rot}");
 
 			FieldOfView = 90;
 
