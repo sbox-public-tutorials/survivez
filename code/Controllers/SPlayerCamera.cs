@@ -12,7 +12,7 @@ namespace survivez.Controllers
 
 		private const float lerpSpeed = 4.0f;
 
-		private const float nextUpdate = 0.03f;
+		private const float nextUpdate = 0.181f;//0.03f;
 		private float lastUpdate;
 
 		// private const float MinDistanceView = 0.25f;
@@ -20,9 +20,19 @@ namespace survivez.Controllers
 
 		// Vector3 lastGoodMouseOffset = Vector3.Forward * MinDistanceView;
 
+
+		[ServerCmd]
+		public static void GiveWantedRotation( Vector3 lookAtPos )
+		{
+			Entity pawn = ConsoleSystem.Caller.Pawn;
+			pawn.Rotation = Rotation.LookAt( (lookAtPos - pawn.Position).WithZ( 0 ).Normal );
+			pawn.EyeRot = pawn.Rotation;
+			// DebugOverlay.Line(pawn.Position, lookAtPos, Color.Red, 1.0f, false);
+		}
+
 		public override void Update()
 		{
-			if ( Local.Pawn is not AnimEntity pawn )
+			if ( Local.Pawn is not SPlayer pawn )
 				return;
 
 			zoom -= Input.MouseWheel;
@@ -56,18 +66,31 @@ namespace survivez.Controllers
 
 			var niceFeelOffset = (Vector3.Up * distance);
 			var center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + (lookOffset/2);
-			if ( Pos.IsNaN )
+			if ( Pos.IsNaN ) // Fixed black screen of death issue...
 			{
 				Pos = center;
 			}
 			lastUpdate += Time.Delta;
-			if (nextUpdate < lastUpdate)
-			{
-				SPlayer.GiveWantedRotation( pawn.Position + (pawn.Velocity/3) + lookOffset );
-				lastUpdate = 0.0f;
-			}
-			// DebugOverlay.Line( pawn.Position, pawn.Position + lookOffset.WithZ(0), 1f, false );
+			
+			Vector3 lookAtPos = pawn.Position + (pawn.Velocity / 3) + lookOffset;
+			Rotation lookRot = Rotation.LookAt( (lookAtPos - pawn.Position).WithZ( 0 ).Normal );
+			
+			//DebugOverlay.Line( pawn.Position, pawn.Position + (pawn.Rotation.Forward * 100.0f), Color.Blue, 1f, false ); // Server...
+			pawn.Rotation = lookRot;//Rotation.Slerp(pawn.Rotation, lookRot, Time.Delta * 0.5f);
+			pawn.EyeRot = pawn.Rotation;
+			//DebugOverlay.Line( pawn.Position, pawn.Position + (pawn.Rotation.Forward * 100.0f), Color.Yellow, 1f, false ); // Client.
 
+			if (pawn.IsAlive)
+			{
+				//if (nextUpdate < lastUpdate)
+				{
+					using ( Prediction.Off() )
+					{
+						GiveWantedRotation( lookAtPos );
+					}
+					lastUpdate = 0.0f;
+				}
+			}
 			Pos = Vector3.Lerp( Pos, center, Time.Delta * lerpSpeed );
 			Rotation lockedRot = Rotation.FromPitch(85.0f);
 			Rot = lockedRot;

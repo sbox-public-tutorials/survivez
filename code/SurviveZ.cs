@@ -2,7 +2,7 @@
 using Sandbox;
 using survivez.Controllers;
 using survivez.HUD;
-using Sandbox.Nav;
+using survivez.Entities;
 
 namespace survivez
 {
@@ -20,37 +20,27 @@ namespace survivez
 	[Library( "survivez" )]
 	public partial class SurviveZ : Game
 	{
+		public static void Initialize()
+		{
+			new SUI();
+		}
+
 		[Event.Hotload]
 		public static void OnReload()
 		{
+			if ( Host.IsClient )
+			{
+				Log.Info( "Reloading Client UI." );
+				Local.Hud?.Delete();
+				Initialize();
+			}
 		}
 
 		public SurviveZ()
 		{
 			if ( IsServer )
 			{
-				// Create a HUD entity. This entity is globally networked
-				// and when it is created clientside it creates the actual
-				// UI panels. You don't have to create your HUD via an entity,
-				// this just feels like a nice neat way to do it.
-				_ = new SUI();
-
-				// Push the limits...
-				for (var i = 0; i < 50; i++)
-				{
-					NpcTest npc = new NpcTest()
-					{
-						Position = new Vector3(2144.10f + (i * 10.0f), -2256.31f, 4.03f),
-						Steer = new Wander()
-					};
-				}
-
-				Log.Info( "My Gamemode Has Created Serverside!" );
-			}
-
-			if ( IsClient )
-			{
-				Log.Info( "My Gamemode Has Created Clientside!" );
+				Initialize();
 			}
 		}
 
@@ -65,6 +55,16 @@ namespace survivez
 			client.Pawn = player;
 
 			player.Respawn();
+		}
+
+		[ServerCmd("spawn_zombie")]
+		public static void SpawnZombie()
+		{
+			Zombie npc = new()
+			{
+				Position = new Vector3( -290.21f, -2426.63f, 0.03f )
+			};
+			npc.RenderColor = Color.Green;
 		}
 	}
 

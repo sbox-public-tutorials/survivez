@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Misc;
 
@@ -129,6 +130,13 @@ namespace survivez.Weapons
 		{
 			PhysicsGroup?.Wake();
 			Delete();
+		}
+
+
+		public override void CreateHudElements()
+		{
+			CrosshairPanel = new SCrosshair();
+			SCrosshairCanvas.SetCrosshair( CrosshairPanel );
 		}
 
 		[ClientRpc]

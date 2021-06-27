@@ -15,7 +15,6 @@ namespace survivez.Weapons
 		{
 			base.Spawn();
 
-			Log.Info( "Spawn SMG" );
 			SetModel( "Content/models/survivez/weapons/IA2/IA2.vmdl" );
 		}
 
@@ -24,7 +23,7 @@ namespace survivez.Weapons
 			TimeSincePrimaryAttack = 0;
 			TimeSinceSecondaryAttack = 0;
 
-			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+			( Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 
 			//
 			// Tell the clients to play the shoot effects

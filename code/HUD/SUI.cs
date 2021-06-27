@@ -1,4 +1,5 @@
 ﻿using Sandbox.UI;
+using survivez.HUD.Crosshair;
 
 namespace survivez.HUD
 {
@@ -12,8 +13,8 @@ namespace survivez.HUD
 		{
 			if ( IsClient )
 			{
+				RootPanel.AddChild<SCrosshairCanvas>();
 				RootPanel.AddChild<NameTags>();
-				RootPanel.AddChild<CrosshairCanvas>();
 				RootPanel.AddChild<ChatBox>();
 				RootPanel.AddChild<VoiceList>();
 				RootPanel.AddChild<KillFeed>();

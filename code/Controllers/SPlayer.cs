@@ -6,6 +6,10 @@ namespace survivez.Controllers
 {
 	partial class SPlayer : Player
 	{
+		public bool IsAlive { get => Health > 0; }
+
+		private DamageInfo lastDamage;
+
 		public override void Respawn()
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
@@ -38,16 +42,6 @@ namespace survivez.Controllers
 			base.Respawn();
 		}
 
-		[ServerCmd]
-		public static void GiveWantedRotation( Vector3 lookAtPos )
-		{
-			Entity pawn = ConsoleSystem.Caller.Pawn;
-			pawn.Rotation = Rotation.LookAt( (lookAtPos - pawn.Position).WithZ( 0 ).Normal );
-			pawn.EyeRot = pawn.Rotation;
-			//Log.Info( $"Gonna set rotation {pawn} {lookAtPos}" );
-			// DebugOverlay.Line(pawn.Position, lookAtPos, Color.Red, 1.0f, false);
-		}
-
 		/// <summary>
 		/// Called every tick, clientside and serverside.
 		/// </summary>
@@ -62,8 +56,29 @@ namespace survivez.Controllers
 			SimulateActiveChild( cl, ActiveChild );
 		}
 
+		[ClientRpc]
+		public void TookDamage( DamageFlags damageFlags, Vector3 forcePos, Vector3 force )
+		{
+		}
+
+		public override void TakeDamage( DamageInfo info )
+		{
+			if ( GetHitboxGroup( info.HitboxIndex ) == 1 )
+			{
+				info.Damage *= 10.0f;
+			}
+
+			lastDamage = info;
+
+			TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
+
+			base.TakeDamage( info );
+		}
+
 		public override void OnKilled()
 		{
+			BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
+			Inventory.DeleteContents();
 			Inventory = null;
 
 			base.OnKilled();

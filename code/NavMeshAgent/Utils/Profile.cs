@@ -2,9 +2,7 @@ using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sandbox.Debug
 {
@@ -14,7 +12,7 @@ namespace Sandbox.Debug
 		static Entry Root = new Entry();
 		static TimeSince timeSince;
 
-		public static bool debugging = false;
+		public static bool debugging = true;
 
 		internal class Entry
 		{
