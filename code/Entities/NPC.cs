@@ -24,8 +24,6 @@ namespace survivez.Entities
 		Vector3 InputVelocity;
 		Vector3 LookDir;
 
-		private Vector3? Destination { get => Agent.TargetEndPosition; }
-
         [ServerCmd("npc_clear")]
         public static void NPCClear()
         {
@@ -38,21 +36,24 @@ namespace survivez.Entities
         public virtual void Init() {}
         public virtual void Think()
 		{
-			if ( Destination != null )
+			if (!Agent.HasPath)
 			{
-				float dist = Destination.Value.Distance( Position );
-				DebugOverlay.Text( Position, $"{dist}", 0.01f );
-				if ( dist <= 100.0f )
+
+				using(Sandbox.Debug.Profile.Scope( "NpcTest::Think::Looking For New Destination" ))
 				{
-					Log.Info($"Clear Destination {dist}");
-					ClearDestination();
+					SetDestination( Position + new Vector3( Rand.Float(-25, 50) * 10, Rand.Float(-25, 50) * 10, 0 ) );
 				}
 			}
 
-			if (Destination == null)
+			if ( Agent.HasPath )
 			{
-                Log.Info("Set Destination");
-				SetDestination( Position + new Vector3( Rand.Float(-25, 50), Rand.Float(-25, 50), 0 ) );
+				float dist = Agent.TargetEndPosition.Distance( Position );
+				DebugOverlay.Text( Position, $"{dist}", 0.01f );
+				if ( dist <= 100.0f )
+				{
+					DebugOverlay.ScreenText(10, $"Clear Destination {dist} | {Agent.TargetEndPosition}", 0.1f);
+					ClearDestination();
+				}
 			}
 		}
         public virtual void OnDeath() {}
@@ -60,13 +61,15 @@ namespace survivez.Entities
 
         public void ClearDestination()
 		{
-			Agent.TargetEndPosition = null;
+			Host.AssertServer();
+			Agent.ClearDestination();
 		}
-        public void SetDestination( Vector3? destination )
+        public void SetDestination( Vector3 destination )
 		{
+			Host.AssertServer();
 			if (destination != null)
-				DebugOverlay.Line( Position, destination.Value, Color.Magenta, 10.0f );
-			Agent.TargetEndPosition = destination;
+				DebugOverlay.Line( Position, destination, Color.Magenta, 10.0f );
+			Agent.SetDestination(destination);
         }
 
         public override void Spawn()

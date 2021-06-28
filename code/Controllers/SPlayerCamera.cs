@@ -12,7 +12,7 @@ namespace survivez.Controllers
 
 		private const float lerpSpeed = 4.0f;
 
-		private const float nextUpdate = 0.181f;//0.03f;
+		private const float nextUpdate = 0.03f;
 		private float lastUpdate;
 
 		// private const float MinDistanceView = 0.25f;
@@ -34,6 +34,7 @@ namespace survivez.Controllers
 		{
 			if ( Local.Pawn is not SPlayer pawn )
 				return;
+
 
 			zoom -= Input.MouseWheel;
 			zoom = MathX.Clamp( zoom, zoomMin, zoomMax );
@@ -61,11 +62,11 @@ namespace survivez.Controllers
 			// DebugOverlay.ScreenText(10, $"Mouse Offset : {mouseOffset}");
 
 			//var lookOffset = (pawn.Rotation.Forward * (50.0f + zoom));
-			var lookOffset = mouseToLocal;
+			Vector3 lookOffset = mouseToLocal;
 			// DebugOverlay.ScreenText(11, $"Look Offset : {lookOffset}");
 
-			var niceFeelOffset = (Vector3.Up * distance);
-			var center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + (lookOffset/2);
+			Vector3 niceFeelOffset = (Vector3.Up * distance);
+			Vector3 center = pawn.Position + offset + niceFeelOffset + (pawn.Velocity/3) + (lookOffset/2);
 			if ( Pos.IsNaN ) // Fixed black screen of death issue...
 			{
 				Pos = center;
@@ -76,7 +77,7 @@ namespace survivez.Controllers
 			Rotation lookRot = Rotation.LookAt( (lookAtPos - pawn.Position).WithZ( 0 ).Normal );
 			
 			//DebugOverlay.Line( pawn.Position, pawn.Position + (pawn.Rotation.Forward * 100.0f), Color.Blue, 1f, false ); // Server...
-			pawn.Rotation = lookRot;//Rotation.Slerp(pawn.Rotation, lookRot, Time.Delta * 0.5f);
+			pawn.Rotation = lookRot;
 			pawn.EyeRot = pawn.Rotation;
 			//DebugOverlay.Line( pawn.Position, pawn.Position + (pawn.Rotation.Forward * 100.0f), Color.Yellow, 1f, false ); // Client.
 

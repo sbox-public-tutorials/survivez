@@ -6,8 +6,8 @@ namespace survivez.NavMeshAgent
 {
     public static class NavMeshSettings
     {
-            [ConVar.Replicated]
-            public static bool nav_drawpath { get; set; }
+        [ConVar.Replicated]
+        public static bool nav_drawpath { get; set; }
     }
 
     public partial struct NavMeshPath
@@ -21,12 +21,24 @@ namespace survivez.NavMeshAgent
 	    public NavMeshOutput Output;
 
         public List<Vector3> PathPoints { get; set; }
-        private Vector3? targetPosition;
-		public Vector3? TargetEndPosition { get => targetPosition; set { Log.Info($"Setting TargetEndPosition {value}"); PathPoints = new List<Vector3>(); targetPosition = value; } }
+		public Vector3 TargetEndPosition { get; private set; }
 
         private Vector3 NextPosition { get; set; }
 
         public bool HasPath => PathPoints != null && PathPoints.Count > 0;
+
+        public void ClearDestination()
+        {
+            PathPoints = null;
+            TargetEndPosition = Vector3.Zero;
+        }
+
+        public void SetDestination( Vector3 _targetPosition )
+        {
+            DebugOverlay.ScreenText(11, $"Setting TargetEndPosition {_targetPosition}");
+            PathPoints = new List<Vector3>();
+            TargetEndPosition = _targetPosition;
+        }
 
         public void Update( Vector3 currentPosition )
         {
@@ -35,14 +47,11 @@ namespace survivez.NavMeshAgent
 
         private void CalculateMovePath( Vector3 currentPosition, Vector3 nextPosition )
         {
-			if ( TargetEndPosition == null )
-				return;
-
-			using ( Sandbox.Debug.Profile.Scope( $"NavMesh Calculate Move Path {PathPoints.Count}" ) )
+			using ( Sandbox.Debug.Profile.Scope( $"NavMesh Calculate Move Path" ) )
 			{
 				bool shouldBuild = false;
 
-				if ( !TargetEndPosition.Value.IsNearlyEqual( nextPosition, 5 ) )
+				if ( !TargetEndPosition.IsNearlyEqual( nextPosition, 5 ) )
 				{
 					TargetEndPosition = nextPosition;
 					shouldBuild = true;
@@ -54,12 +63,12 @@ namespace survivez.NavMeshAgent
 					NavMesh.BuildPath( currentPosition, NextPosition, PathPoints );
 				}
 
-				if ( PathPoints.Count <= 1 )
+				if ( PathPoints == null || PathPoints.Count <= 1 )
 					return;
 
 				var deltaToCurrent = currentPosition - PathPoints[0];
 				var deltaToNext = currentPosition - PathPoints[1];
-				var delta = deltaToNext - deltaToCurrent;
+				var delta = PathPoints[1] - PathPoints[0];
 				var deltaNormal = delta.Normal;
 
 				DebugOverlay.ScreenText( 5, $"Delta: {delta} | DeltaNormal: {deltaNormal}" );

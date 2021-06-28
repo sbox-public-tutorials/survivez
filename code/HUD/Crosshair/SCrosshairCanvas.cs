@@ -11,7 +11,7 @@ namespace survivez.HUD.Crosshair
 		public SCrosshairCanvas()
 		{
 			Singleton = this;
-			StyleSheet.Load( "/hud/crosshair/crosshaircanvas.scss" );
+			StyleSheet.Load( "/Content/ui/crosshair/crosshaircanvas.scss" );
 			SetClass( "crosshaircanvas", true );
 		}
 

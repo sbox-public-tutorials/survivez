@@ -1,8 +1,8 @@
 ﻿
 using Sandbox;
 using survivez.Controllers;
-using survivez.HUD;
 using survivez.Entities;
+using System.Linq;
 
 namespace survivez
 {
@@ -20,28 +20,21 @@ namespace survivez
 	[Library( "survivez" )]
 	public partial class SurviveZ : Game
 	{
-		public static void Initialize()
-		{
-			new SUI();
-		}
-
 		[Event.Hotload]
 		public static void OnReload()
 		{
-			if ( Host.IsClient )
+			if (Host.IsServer)
 			{
-				Log.Info( "Reloading Client UI." );
-				Local.Hud?.Delete();
-				Initialize();
+				SPlayer[] players = All.OfType<SPlayer>().ToArray();
+				foreach ( SPlayer player in players )
+				{
+					player.Respawn();
+				}
 			}
 		}
 
 		public SurviveZ()
 		{
-			if ( IsServer )
-			{
-				Initialize();
-			}
 		}
 
 		/// <summary>

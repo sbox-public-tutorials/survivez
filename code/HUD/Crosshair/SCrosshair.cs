@@ -16,7 +16,7 @@ namespace survivez.HUD.Crosshair
 
 		public SCrosshair()
 		{
-			StyleSheet.Load( "/hud/crosshair/standardcrosshair.scss" );
+			StyleSheet.Load( "/Content/ui/crosshair/standardcrosshair.scss" );
 			SetClass( "crosshair", true );
 		}
 

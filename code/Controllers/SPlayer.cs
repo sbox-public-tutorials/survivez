@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using survivez.HUD;
 using survivez.Inventory;
 using survivez.Weapons;
 
@@ -14,7 +15,6 @@ namespace survivez.Controllers
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
 
-			Log.Info( $"Respawn {IsServer} {IsClient}" );
 			//
 			// Use WalkController for movement (you can make your own PlayerController for 100% control)
 			//
@@ -39,6 +39,8 @@ namespace survivez.Controllers
 			Inventory.Add( new SMG(), true );
 			Inventory.Add( new Shotgun() );
 
+			SpawnHUD();
+
 			base.Respawn();
 		}
 
@@ -54,6 +56,14 @@ namespace survivez.Controllers
 			// simulate those too.
 			//
 			SimulateActiveChild( cl, ActiveChild );
+		}
+
+		[ClientRpc]
+		public void SpawnHUD()
+		{
+			Log.Info( "Reloading Client UI." );
+			Local.Hud?.Delete();
+			new SUI();
 		}
 
 		[ClientRpc]
