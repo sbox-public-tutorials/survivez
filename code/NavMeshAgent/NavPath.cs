@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 public class NavPath
 {
-
+	[ConVar.Replicated]
+	public static bool nav_drawpath { get; set; }
 
 	public Vector3 TargetPosition;
 	public List<Vector3> Points = new List<Vector3>();
