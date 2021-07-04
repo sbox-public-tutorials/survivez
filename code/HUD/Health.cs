@@ -17,7 +17,6 @@ namespace survivez.HUD
 		{
 			var player = Local.Pawn;
 			if ( player == null ) return;
-
 			Label.Text = $"{player.Health.CeilToInt()}";
 		}
 	}
