@@ -2,6 +2,7 @@
 using Sandbox;
 using survivez.Controllers;
 using survivez.Entities;
+using survivez.Misc;
 using System.Linq;
 
 namespace survivez
@@ -23,18 +24,29 @@ namespace survivez
 		[Event.Hotload]
 		public static void OnReload()
 		{
-			if (Host.IsServer)
+			if ( Host.IsServer )
 			{
 				SPlayer[] players = All.OfType<SPlayer>().ToArray();
 				foreach ( SPlayer player in players )
 				{
 					player.Respawn();
 				}
+				if ( Game != null )
+				{
+					Game.RoundSystem = new WaveDefenseRoundSystem();
+					Game.RoundSystem.OnRoundOrPhaseChange();
+				}
 			}
 		}
 
+		public static SurviveZ Game { get; set; }
+
+		public WaveDefenseRoundSystem RoundSystem { get; set; }
+
 		public SurviveZ()
 		{
+			Game = this;
+			RoundSystem = new WaveDefenseRoundSystem();
 		}
 
 		/// <summary>
@@ -48,9 +60,17 @@ namespace survivez
 			client.Pawn = player;
 
 			player.Respawn();
+			Game.RoundSystem.UpdatePlayersRoundInformation( player );
 		}
 
-		[ServerCmd("spawn_zombie")]
+		[Event.Tick.Server]
+		public void ServerTick()
+		{
+			var delta = Time.Delta;
+			RoundSystem.Tick( delta );
+		}
+
+		[ServerCmd( "spawn_zombie" )]
 		public static void SpawnZombie()
 		{
 			Zombie npc = new()

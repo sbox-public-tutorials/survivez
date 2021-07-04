@@ -20,6 +20,7 @@ namespace survivez.HUD
 				RootPanel.AddChild<KillFeed>();
 				RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 				RootPanel.AddChild<Health>();
+				RootPanel.AddChild<RoundPanel>();
 			}
 		}
 	}
