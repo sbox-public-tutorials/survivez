@@ -7,7 +7,7 @@ namespace Sandbox.Nav
 		public float MinRadius { get; set; } = 200;
 		public float MaxRadius { get; set; } = 500;
 
-		public Wander()
+		public Wander( Entity _owner ) : base(_owner)
 		{
 
 		}

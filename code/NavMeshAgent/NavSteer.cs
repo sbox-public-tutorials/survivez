@@ -6,10 +6,25 @@ using System.Buffers;
 
 public class NavSteer
 {
-	protected NavPath Path { get; private set; }
-
-	public NavSteer()
+	public struct NavSteerOutput
 	{
+		public bool Finished;
+		public Vector3 Direction;
+	}
+
+	public NavPath Path { get; private set; }
+
+	public Entity Owner;
+
+	public Vector3 Target { get; set; }
+
+	public NavSteerOutput Output;
+
+	public float AvoidanceRadius { get; set; } = 95.0f;
+
+	public NavSteer( Entity _Owner )
+	{
+		Owner = _Owner;
 		Path = new NavPath();
 	}
 
@@ -17,7 +32,7 @@ public class NavSteer
 	{
 		using ( Sandbox.Debug.Profile.Scope( "Update Path" ) )
 		{
-			Path.Update( currentPosition, Target ); 
+			Path.Update( currentPosition, Target );
 		}
 
 		Output.Finished = Path.IsEmpty;
@@ -44,7 +59,6 @@ public class NavSteer
 	{
 		var center = position + Output.Direction * radius * 0.5f;
 
-		var objectRadius = 200.0f;
 		Vector3 avoidance = default;
 
 		foreach ( var ent in Physics.GetEntitiesInSphere( center, radius ) )
@@ -55,7 +69,7 @@ public class NavSteer
 			var delta = (position - ent.Position).WithZ( 0 );
 			var closeness = delta.Length;
 			if ( closeness < 0.001f ) continue;
-			var thrust = ((objectRadius - closeness) / objectRadius).Clamp( 0, 1 );
+			var thrust = ((AvoidanceRadius - closeness) / AvoidanceRadius).Clamp( 0, 1 );
 			if ( thrust <= 0 ) continue;
 
 			//avoidance += delta.Cross( Output.Direction ).Normal * thrust * 2.5f;
@@ -71,16 +85,5 @@ public class NavSteer
 		{
 			Path.DebugDraw( 0.1f, 0.1f );
 		}
-	}
-
-	public Vector3 Target { get; set; }
-
-	public NavSteerOutput Output;
-
-
-	public struct NavSteerOutput
-	{
-		public bool Finished;
-		public Vector3 Direction;
 	}
 }
