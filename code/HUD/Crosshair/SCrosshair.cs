@@ -27,20 +27,11 @@ namespace survivez.HUD.Crosshair
 			if ( Local.Pawn is not SPlayer pawn )
 				return;
 
-			TraceResult tr = Trace.Ray( pawn.EyePos, pawn.EyePos + (pawn.EyeRot.Forward.WithZ( 0 ) * 200.0f) ).Ignore(pawn).Run();
-			/*
-			if ( tr.Entity is NPC npc )
-				Style.BorderColor = Color.Red;
-			else
-				Style.BorderColor = Color.White;
-			*/
+			TraceResult tr = Trace.Ray( pawn.EyePos, pawn.EyePos + Screen.GetDirection( Mouse.Position ) * 100000.0f ).Ignore( pawn ).Run();
 
-			// Trace {-1 - 1}		-- Inheritly has more values available.
-			// 1 + {-1 - 1} = ||{0 - 2}|| = {0 - 1} & flip x and y = HTML Panel
-			// HTML Panel {0 - 1}	
-			Vector2 trToScreen = tr.EndPos.ToScreen();
-			//Log.Info( $"TrToScreen	| Output Position" );
-			//Log.Info( $"{trToScreen}	| {position}" );
+			Vector3 mouseToWorld = tr.EndPos.WithZ( 0 );
+
+			Vector2 trToScreen = mouseToWorld.ToScreen();
 			position = trToScreen;
 			float padding = 0.1f;
 			position.x = MathX.Clamp( position.x, 0.0f + padding, 1.0f - padding );
@@ -48,6 +39,7 @@ namespace survivez.HUD.Crosshair
 
 			Style.Top	= new Length()	{ Unit = LengthUnit.Percentage,		Value = position.y * 100.0f };
 			Style.Left	= new Length()	{ Unit = LengthUnit.Percentage,		Value = position.x * 100.0f };
+
 
 			Style.Width = 12 * scale;
 			Style.Height = 12 * scale;

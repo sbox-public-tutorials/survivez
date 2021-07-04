@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using survivez.Controllers;
 using System;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace survivez.Inventory
 {
 	public partial class PlayerInventory : BaseInventory
 	{
-		public PlayerInventory( Player player ) : base( player )
+		public PlayerInventory( SPlayer player ) : base( player )
 		{
 		}
 

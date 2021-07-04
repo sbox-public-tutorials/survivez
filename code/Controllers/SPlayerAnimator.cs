@@ -15,7 +15,7 @@ namespace survivez.Controllers
 
 			// Rotate the body in said rotation...
 			DoRotation( idealRotation );
-			DoWalk( idealRotation );
+			DoWalk();
 
 			//
 			// Let the animation graph know some shit
@@ -87,38 +87,37 @@ namespace survivez.Controllers
 			SetParam( "b_shuffle", TimeSinceFootShuffle < 0.1 );
 		}
 
-		void DoWalk( Rotation idealRotation )
+		void DoWalk()
 		{
-			//
-			// These tweak the animation speeds to something we feel is right,
-			// so the foot speed matches the floor speed. Your art should probably
-			// do this - but that ain't how we roll
-			//
-			SetParam( "walkspeed_scale", 2.0f / 190.0f );
-			SetParam( "runspeed_scale", 2.0f / 320.0f );
-			SetParam( "duckspeed_scale", 2.0f / 80.0f );
+			// Move Speed
+			{
+				var dir = Velocity;
+				var forward = Rotation.Forward.Dot( dir );
+				var sideward = Rotation.Right.Dot( dir );
 
-			//
-			// Work out our movement relative to our body rotation
-			//
-			var moveDir = WishVelocity;
-			var forward = idealRotation.Forward.Dot( moveDir );
-			var sideward = idealRotation.Right.Dot( moveDir );
+				var angle = MathF.Atan2( sideward, forward ).RadianToDegree().NormalizeDegrees();
 
+				SetParam( "move_direction", angle );
+				SetParam( "move_speed", Velocity.Length );
+				SetParam( "move_groundspeed", Velocity.WithZ( 0 ).Length );
+				SetParam( "move_y", sideward );
+				SetParam( "move_x", forward );
+			}
 
-			var angle = MathF.Atan2( sideward, forward ).RadianToDegree().NormalizeDegrees();
-			//DebugOverlay.Text( Pos, $"{angle}" );
-			SetParam( "move_direction", angle );
+			// Wish Speed
+			{
+				var dir = WishVelocity;
+				var forward = Rotation.Forward.Dot( dir );
+				var sideward = Rotation.Right.Dot( dir );
 
+				var angle = MathF.Atan2( sideward, forward ).RadianToDegree().NormalizeDegrees();
 
-			//
-			// Set our speeds on the animgraph
-			//
-			var speedScale = Pawn.Scale;
-
-			SetParam( "forward", forward );
-			SetParam( "sideward", sideward );
-			SetParam( "wishspeed", speedScale > 0.0f ? WishVelocity.Length / speedScale : 0.0f );
+				SetParam( "wish_direction", angle );
+				SetParam( "wish_speed", WishVelocity.Length );
+				SetParam( "wish_groundspeed", WishVelocity.WithZ( 0 ).Length );
+				SetParam( "wish_y", sideward );
+				SetParam( "wish_x", forward );
+			}
 		}
 
 		public override void OnEvent( string name )

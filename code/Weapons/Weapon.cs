@@ -9,6 +9,8 @@ namespace survivez.Weapons
 	{
 		public virtual float ReloadTime => 3.0f;
 
+		public float Zoom = 1.0f;
+
 		public PickupTrigger PickupTrigger { get; protected set; }
 
 		[Net, Predicted]

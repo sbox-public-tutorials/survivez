@@ -13,8 +13,9 @@ namespace survivez.Weapons
         public override void Spawn()
         {
             base.Spawn();
+			Zoom = 1000.0f;
 
-            SetModel( "Content/models/survivez/weapons/shotgun/shotgun.vmdl" );
+			SetModel( "Content/models/survivez/weapons/shotgun/shotgun.vmdl" );
         }
 
         public override void AttackPrimary()
@@ -38,21 +39,7 @@ namespace survivez.Weapons
 
         public override void AttackSecondary()
         {
-            TimeSincePrimaryAttack = -0.5f;
-            TimeSinceSecondaryAttack = -0.5f;
-
-            (Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
-
-            //
-            // Tell the clients to play the shoot effects
-            //
-            DoubleShootEffects();
-            PlaySound( "rust_pumpshotgun.shootdouble" );
-
-            //
-            // Shoot the bullets
-            //
-            ShootBullets( 20, 0.4f, 20.0f, 8.0f, 3.0f );
+			return;
         }
 
         [ClientRpc]

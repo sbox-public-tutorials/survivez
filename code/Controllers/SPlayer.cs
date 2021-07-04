@@ -36,8 +36,8 @@ namespace survivez.Controllers
 			EnableShadowInFirstPerson	= true;
 
 			Inventory = new PlayerInventory( this );
-			Inventory.Add( new SMG(), true );
-			Inventory.Add( new Shotgun() );
+			Inventory.Add( new Shotgun(), true );
+			Inventory.Add( new SMG() );
 
 			SpawnHUD();
 

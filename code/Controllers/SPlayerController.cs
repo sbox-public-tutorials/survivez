@@ -1,10 +1,14 @@
 ﻿using Sandbox;
+using System;
 
 namespace survivez.Controllers
 {
 	[Library]
 	public class SPlayerController : BasePlayerController
 	{
+		public float Weight { get; set; } = 0.0f;
+		public float Strength { get; set; } = 200.0f;
+
 		public float SprintSpeed { get; set; } = 320.0f;
 		public float WalkSpeed { get; set; } = 150.0f;
 		public float DefaultSpeed { get; set; } = 190.0f;
@@ -133,7 +137,6 @@ namespace survivez.Controllers
 			bool bStartOnGround = GroundEntity != null;
 			if ( bStartOnGround )
 			{
-
 				Velocity = Velocity.WithZ( 0 );
 
 				if ( GroundEntity != null )

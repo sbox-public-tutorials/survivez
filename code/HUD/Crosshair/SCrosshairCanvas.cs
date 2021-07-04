@@ -1,5 +1,5 @@
-using Sandbox;
 using Sandbox.UI;
+
 namespace survivez.HUD.Crosshair
 {
 	public partial class SCrosshairCanvas : Panel
