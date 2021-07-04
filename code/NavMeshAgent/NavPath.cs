@@ -26,10 +26,13 @@ public class NavPath
 			var from_fixed = NavMesh.GetClosestPoint( from );
 			var tofixed = NavMesh.GetClosestPoint( to );
 
-			Points.Clear();
-			NavMesh.GetClosestPoint( from );
-			NavMesh.BuildPath( from_fixed.Value, tofixed.Value, Points );
-			//Points.Add( NavMesh.GetClosestPoint( to ) );
+			if (from_fixed != null && tofixed != null)
+			{
+				Points.Clear();
+				NavMesh.GetClosestPoint( from );
+				NavMesh.BuildPath( from_fixed.Value, tofixed.Value, Points );
+				//Points.Add( NavMesh.GetClosestPoint( to ) );
+			}
 		}
 
 		if ( Points.Count <= 1 )

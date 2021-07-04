@@ -15,15 +15,21 @@ namespace survivez.Entities
     public partial class Zombie : NPC
     {
 		public Entity TargetEnemy { get; private set; }
-		public float MinDamage { get; set; } = 2.0f;
-		public float MaxDamage { get; set; } = 8.0f;
+		public float MinDamage { get; set; } = 5.0f;
+		public float MaxDamage { get; set; } = 10.0f;
 		public float SearchRadius { get; set; } = 800;
+
+		public float AttackRadius { get; set; } = 60.0f;
+		public float lastAttackTime;
+		public float AttackDelay { get; set; } = 1.0f;
 
 		public Zombie() : base()
 		{
 			Steer = new Follow( this, null );
 			this.SetAnimInt( "holdtype", 4 );
+			this.SetAnimInt( "holdtype_handedness", 0 );
 			this.SetAnimFloat( "aimat_weight", 1.0f );
+			this.RenderColor = Color.Green;
 		}
 
 		public void SetDestination(Vector3 _position)
@@ -33,14 +39,20 @@ namespace survivez.Entities
 
 		public override void Think()
 		{
+			lastAttackTime += Time.Delta;
+
 			// Ensure that the enemy isn't too far from us.
-			if (TargetEnemy != null)
+			if (TargetEnemy != null && TargetEnemy.IsValid() )
 			{
 				float dist = TargetEnemy.Position.Distance( Position );
 				if ( dist > (SearchRadius * 1.2f) )
 				{
 					TargetEnemy = null;
 					(Steer as Follow).FollowTarget = null;
+				}
+				else if ( dist <= AttackRadius )
+				{
+					Attack();
 				}
 			}
 
@@ -59,7 +71,15 @@ namespace survivez.Entities
 		public void Attack()
 		{
 			float Damage = Rand.Float( MinDamage, MaxDamage );
-			this.SetAnimBool( "b_attack", true );
+			if ( lastAttackTime > AttackDelay )
+			{
+				this.SetAnimBool( "b_attack", true );
+				//if (TargetEnemy.Position.Distance( Position ) <= 65)
+				{
+					TargetEnemy.TakeDamage( new DamageInfo() { Damage = Damage, Attacker = this, Flags = DamageFlags.Blunt } );
+				}
+				lastAttackTime = 0.0f;
+			}
 		}
 
 		public Entity FindNearestTarget()

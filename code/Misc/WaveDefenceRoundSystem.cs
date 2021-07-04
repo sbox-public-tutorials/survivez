@@ -14,7 +14,7 @@ namespace survivez.Misc
 			TotalPhases = 2;
 
 			// float[] phaseDurations = { 1000.0f * 60.0f * 5.0f, 1000.0f * 60.0f * 10.0f };
-			float[] phaseDurations = { 1f, 5f };
+			float[] phaseDurations = { 60f, 120f };
 			PhaseDuration = phaseDurations;
 		}
 
