@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using survivez.Controllers;
 using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Misc;
@@ -22,6 +23,8 @@ namespace survivez.Weapons
 
 		[Net, Predicted]
 		public TimeSince TimeSinceDeployed { get; set; }
+		public string ItemName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+		public float ItemWeight { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
 		public Panel CrosshairPhysicalPanel;
 
@@ -217,6 +220,16 @@ namespace survivez.Weapons
 			{
 				ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );
 			}
+		}
+
+		public void OnItemPickup( SPlayer player )
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void ItemDrop( SPlayer player, Vector3 position, Rotation direction )
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
