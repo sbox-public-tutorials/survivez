@@ -1,4 +1,6 @@
-﻿using Sandbox.UI;
+﻿using Sandbox;
+using Sandbox.UI;
+using survivez.Controllers;
 using survivez.HUD.Crosshair;
 
 namespace survivez.HUD
@@ -13,7 +15,10 @@ namespace survivez.HUD
 		{
 			if ( IsClient )
 			{
-				RootPanel.AddChild<SCrosshairCanvas>();
+				if ( Local.Pawn is not SPlayer pawn )
+					return;
+
+				pawn.crosshairCanvas = RootPanel.AddChild<SCrosshairCanvas>();
 				RootPanel.AddChild<NameTags>();
 				RootPanel.AddChild<ChatBox>();
 				RootPanel.AddChild<VoiceList>();

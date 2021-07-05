@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using survivez.Controllers;
 using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Misc;
@@ -140,9 +141,15 @@ namespace survivez.Weapons
 
 		public override void CreateHudElements()
 		{
+			if ( Local.Pawn is not SPlayer pawn )
+				return;
+
 			CrosshairPanel = new SCrosshair();
 			CrosshairPhysicalPanel = new SCrosshairPhysical();
-			SCrosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
+			if ( pawn.crosshairCanvas != null )
+			{
+				pawn.crosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
+			}
 		}
 
 		[ClientRpc]

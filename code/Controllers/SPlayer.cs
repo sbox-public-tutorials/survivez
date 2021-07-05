@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using survivez.HUD;
+using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Weapons;
 
@@ -7,6 +8,8 @@ namespace survivez.Controllers
 {
 	partial class SPlayer : Player
 	{
+		public SCrosshairCanvas crosshairCanvas;
+
 		public bool IsAlive { get => Health > 0; }
 
 		private DamageInfo lastDamage;
@@ -40,7 +43,7 @@ namespace survivez.Controllers
 			Inventory.Add( new Axe() );
 			Inventory.Add( new Shotgun() );
 
-			SpawnHUD();
+			SpawnHUD( To.Single(GetClientOwner()) );
 
 			base.Respawn();
 		}
