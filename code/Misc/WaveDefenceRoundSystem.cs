@@ -14,7 +14,8 @@ namespace survivez.Misc
 			TotalPhases = 2;
 
 			// float[] phaseDurations = { 1000.0f * 60.0f * 5.0f, 1000.0f * 60.0f * 10.0f };
-			float[] phaseDurations = { 60f, 120f };
+			// 2 Minutes of Prep per round set; 3 minutes of defending... (This may need to be adjusted later...)
+			float[] phaseDurations = { 120.0f, 180.0f };
 			PhaseDuration = phaseDurations;
 		}
 

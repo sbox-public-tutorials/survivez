@@ -7,22 +7,32 @@ namespace survivez.HUD.Crosshair
 		public static SCrosshairCanvas Singleton;
 
 		public static Panel CurrentCrosshair { get; private set; }
+		public static Panel CurrentCrosshairPhysical { get; private set; }
 
 		public SCrosshairCanvas()
 		{
 			Singleton = this;
-			StyleSheet.Load( "/Content/ui/crosshair/crosshaircanvas.scss" );
-			SetClass( "crosshaircanvas", true );
+			StyleSheet.Load( "/Content/ui/crosshair/crosshair.scss" );
 		}
 
-		public static void SetCrosshair( Panel crosshairPanel )
+		// Allows you to change the Crosshair.
+		// 		- This is Instantiated by Weapon.cs (CreateHudElements)
+		public static void SetCrosshair( Panel crosshairPanel, Panel crosshairPhysicalPanel = null )
 		{
 			if ( Singleton == null )
 				return;
 
 			Singleton.DeleteChildren();
-			crosshairPanel.Parent = Singleton;
+			if (crosshairPanel != null)
+			{
+				crosshairPanel.Parent = Singleton;
+			}
+			if (crosshairPhysicalPanel != null)
+			{
+				crosshairPhysicalPanel.Parent = Singleton;
+			}
 			CurrentCrosshair = crosshairPanel;
+			CurrentCrosshairPhysical = crosshairPhysicalPanel;
 		}
 	}
 }

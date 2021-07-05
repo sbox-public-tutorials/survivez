@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Misc;
@@ -21,6 +22,8 @@ namespace survivez.Weapons
 
 		[Net, Predicted]
 		public TimeSince TimeSinceDeployed { get; set; }
+
+		public Panel CrosshairPhysicalPanel;
 
 		public override void Spawn()
 		{
@@ -138,7 +141,8 @@ namespace survivez.Weapons
 		public override void CreateHudElements()
 		{
 			CrosshairPanel = new SCrosshair();
-			SCrosshairCanvas.SetCrosshair( CrosshairPanel );
+			CrosshairPhysicalPanel = new SCrosshairPhysical();
+			SCrosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
 		}
 
 		[ClientRpc]
@@ -155,6 +159,7 @@ namespace survivez.Weapons
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "fire" );
+			CrosshairPhysicalPanel?.CreateEvent( "fire" );
 		}
 
 		/// <summary>
