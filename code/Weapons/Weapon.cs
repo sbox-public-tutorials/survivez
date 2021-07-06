@@ -163,17 +163,7 @@ namespace survivez.Weapons
 
 		public override void CreateHudElements()
 		{
-			if ( Local.Pawn is not SPlayer pawn )
-				return;
-
-			Log.Info( "Create Hud Elements - Weapon" );
-
-			CrosshairPanel = new SCrosshair();
-			CrosshairPhysicalPanel = new SCrosshairPhysical();
-			if ( pawn.CrosshairCanvas != null )
-			{
-				pawn.CrosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
-			}
+			// This is the wrong assumption!
 		}
 
 		[ClientRpc]

@@ -15,10 +15,13 @@ namespace survivez.HUD
 		{
 			if ( IsClient )
 			{
+				Log.Info( "SUI!" );
 				if ( Local.Pawn is not SPlayer pawn )
 					return;
 
+				Log.Info( "SUI - Spawning everything!" );
 				pawn.CrosshairCanvas = RootPanel.AddChild<SCrosshairCanvas>();
+				pawn.CrosshairCanvas.SetCrosshair( new SCrosshair(), new SCrosshairPhysical() );
 				RootPanel.AddChild<NameTags>();
 				RootPanel.AddChild<ChatBox>();
 				RootPanel.AddChild<VoiceList>();

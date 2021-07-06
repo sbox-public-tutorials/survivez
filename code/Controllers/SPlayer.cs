@@ -38,12 +38,15 @@ namespace survivez.Controllers
 			EnableHideInFirstPerson		= true;
 			EnableShadowInFirstPerson	= true;
 
+			Log.Info( GetClientOwner().NetworkIdent );
+
+			SpawnHUD( To.Single(GetClientOwner()) );
+
+			// Needs to be last... since Weapons have UI elements.
 			Inventory = new PlayerInventory( this );
 			Inventory.Add( new SMG(), true );
 			Inventory.Add( new Axe() );
 			Inventory.Add( new Shotgun() );
-
-			SpawnHUD( To.Single(GetClientOwner()) );
 
 			base.Respawn();
 		}
@@ -65,7 +68,7 @@ namespace survivez.Controllers
 		[ClientRpc]
 		public void SpawnHUD()
 		{
-			Log.Info( "Reloading Client UI." );
+			Log.Info( "Loading Client UI." );
 			Local.Hud?.Delete();
 			new SUI();
 		}

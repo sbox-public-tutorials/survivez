@@ -1,3 +1,4 @@
+using Sandbox;
 using Sandbox.UI;
 
 namespace survivez.HUD.Crosshair
@@ -9,6 +10,7 @@ namespace survivez.HUD.Crosshair
 
 		public SCrosshairCanvas()
 		{
+			Log.Info( "Canvas!" );
 			StyleSheet.Load( "/Content/ui/crosshair/crosshair.scss" );
 		}
 
@@ -16,6 +18,7 @@ namespace survivez.HUD.Crosshair
 		// 		- This is Instantiated by Weapon.cs (CreateHudElements)
 		public void SetCrosshair( Panel crosshairPanel, Panel crosshairPhysicalPanel = null )
 		{
+			Log.Info( "Canvas - Crosshair!" );
 			this.DeleteChildren();
 			if (crosshairPanel != null)
 			{
