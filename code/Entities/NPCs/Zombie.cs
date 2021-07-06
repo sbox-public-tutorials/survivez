@@ -1,6 +1,5 @@
 using Sandbox;
 using System.Linq;
-using System;
 using survivez.Nav;
 using survivez.Controllers;
 
@@ -12,7 +11,8 @@ namespace survivez.Entities
 	// TODO :: Make Player Action Sounds (Sneak, Run, Walk, and Fire a weapon) emit sound levels.
 	// TODO :: Make Player Smell (over time of being in an area, a player can build up a scent; and the zombie may get alerted).
 
-    public partial class Zombie : NPC
+	[Library( "sz_zombie_standard", Description = "Standard Zombie." )]
+	public partial class Zombie : NPC
     {
 		public Entity TargetEnemy { get; private set; }
 		public float MinDamage { get; set; } = 5.0f;
