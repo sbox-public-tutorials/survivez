@@ -26,6 +26,8 @@ namespace survivez.HUD.Crosshair
 			if ( Local.Pawn is not SPlayer pawn )
 				return;
 
+			DebugOverlay.ScreenText( 1, "Rendering..." );
+
 			// TraceResult tr = Trace.Ray( pawn.EyePos, pawn.EyePos + Screen.GetDirection( Mouse.Position ) * 100000.0f ).Ignore( pawn ).Run();
 			// Vector3 mousePosition = tr.EndPos.WithZ(0);
 			// float dist = tr.EndPos.Distance(pawn.Position);

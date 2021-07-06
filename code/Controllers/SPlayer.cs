@@ -8,7 +8,7 @@ namespace survivez.Controllers
 {
 	partial class SPlayer : Player
 	{
-		public SCrosshairCanvas crosshairCanvas;
+		public SCrosshairCanvas CrosshairCanvas { get; set; }
 
 		public bool IsAlive { get => Health > 0; }
 

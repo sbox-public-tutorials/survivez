@@ -144,11 +144,13 @@ namespace survivez.Weapons
 			if ( Local.Pawn is not SPlayer pawn )
 				return;
 
+			Log.Info( "Create Hud Elements - Weapon" );
+
 			CrosshairPanel = new SCrosshair();
 			CrosshairPhysicalPanel = new SCrosshairPhysical();
-			if ( pawn.crosshairCanvas != null )
+			if ( pawn.CrosshairCanvas != null )
 			{
-				pawn.crosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
+				pawn.CrosshairCanvas.SetCrosshair( CrosshairPanel, CrosshairPhysicalPanel );
 			}
 		}
 
@@ -165,8 +167,14 @@ namespace survivez.Weapons
 			}
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
-			CrosshairPanel?.CreateEvent( "fire" );
-			CrosshairPhysicalPanel?.CreateEvent( "fire" );
+
+			if ( Local.Pawn is not SPlayer pawn )
+				return;
+			if ( pawn.CrosshairCanvas != null )
+			{
+				pawn.CrosshairCanvas.CurrentCrosshair?.CreateEvent( "fire" );
+				pawn.CrosshairCanvas.CurrentCrosshairPhysical?.CreateEvent( "fire" );
+			}
 		}
 
 		/// <summary>
