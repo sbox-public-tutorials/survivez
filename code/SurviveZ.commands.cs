@@ -32,15 +32,17 @@ namespace survivez
 
 			if ( attribute == null )
 			{
-				Log.Info( "No Attribute!" );
+				Log.Error( $"{entName}" );
 				return null;
 			}
 
+			/*
 			if ( !attribute.Spawnable )
 			{
 				Log.Info( "Not Spawnable!" );
 				return null;
 			}
+			*/
 
 			var ent = Library.Create<Entity>( entName );
 			Log.Info( $"Spawned Entity {ent}!" );
