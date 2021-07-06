@@ -21,9 +21,12 @@ namespace survivez
 	[Library( "survivez" )]
 	public partial class SurviveZ : Game
 	{
+		public static TimerManager TimerManager;
+
 		[Event.Hotload]
 		public static void OnReload()
 		{
+			Initialize();
 			if ( Host.IsServer )
 			{
 				SPlayer[] players = All.OfType<SPlayer>().ToArray();
@@ -47,6 +50,13 @@ namespace survivez
 		{
 			Game = this;
 			RoundSystem = new WaveDefenseRoundSystem();
+			Initialize();
+		}
+
+		public static void Initialize()
+		{
+			// Initiates at the Client & Server.
+			TimerManager = new TimerManager();
 		}
 
 		/// <summary>
@@ -68,6 +78,20 @@ namespace survivez
 		{
 			var delta = Time.Delta;
 			RoundSystem.Tick( delta );
+
+			if ( TimerManager != null )
+			{
+				TimerManager.Update();
+			}
+		}
+
+		[Event.Tick.Client]
+		public void ClientTick()
+		{
+			if ( TimerManager != null )
+			{
+				TimerManager.Update();
+			}
 		}
 
 		public static bool CanSpawnZombie()

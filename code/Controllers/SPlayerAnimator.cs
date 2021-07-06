@@ -1,10 +1,13 @@
 ﻿using Sandbox;
+using survivez.Misc;
 using System;
 
 namespace survivez.Controllers
 {
 	public class SPlayerAnimator : PawnAnimator
 	{
+		public bool AutoResetAnim = true;
+
 		TimeSince TimeSinceFootShuffle = 60;
 
 		float duck;
@@ -52,9 +55,12 @@ namespace survivez.Controllers
 			}
 			else
 			{
-				SetParam( "holdtype", 0 );
-				SetParam( "aimat_weight", 0.5f ); // old
-				SetParam( "aim_body_weight", 0.5f );
+				if ( AutoResetAnim )
+				{
+					SetParam( "holdtype", 0 );
+					SetParam( "aimat_weight", 0.5f ); // old
+					SetParam( "aim_body_weight", 0.5f );
+				}
 			}
 
 		}
@@ -118,6 +124,48 @@ namespace survivez.Controllers
 				SetParam( "wish_y", sideward );
 				SetParam( "wish_x", forward );
 			}
+		}
+
+		public void Throw()
+		{
+			Log.Info( "Throw!" );
+			
+			int holdType = AnimPawn.GetAnimInt( "holdtype" );
+			Entity currentWeapon = null;
+			if (Pawn.Inventory != null)
+			{
+				currentWeapon = Pawn.Inventory.Active;
+				Pawn.ActiveChild = null;
+			}
+
+			AutoResetAnim = false;
+
+			Timer.Frame( () =>
+			{
+				if ( AnimPawn != null )
+				{
+					AnimPawn.SetAnimInt( "holdtype", 4 );
+					SetParam( "aimat_weight", 1.0f );
+					AnimPawn.SetAnimInt( "holdtype_handedness", 2 );
+					AnimPawn.SetAnimBool( "b_attack", true );
+					// We need to delay this...
+					Timer.Simple( 1.5f * Timer.Second, () =>
+					{
+
+						if ( AnimPawn != null )
+						{
+							if ( currentWeapon != null )
+							{
+								Pawn.ActiveChild = currentWeapon;
+							}
+
+							AutoResetAnim = true;
+
+							AnimPawn.SetAnimInt( "holdtype", holdType );
+						}
+					} );
+				}
+			} );
 		}
 
 		public override void OnEvent( string name )

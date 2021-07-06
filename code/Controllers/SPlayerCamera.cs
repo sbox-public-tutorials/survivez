@@ -24,7 +24,7 @@ namespace survivez.Controllers
 			FieldOfView = 90;
 			Viewer = null;
 
-			offset = (Vector3.Up * 200.0f) + (Vector3.Forward * -20.0f);
+			offset = (Vector3.Forward * -10.0f);
 			Pos = pawn.Position + offset;
 		}
 

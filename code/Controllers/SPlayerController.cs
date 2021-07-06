@@ -133,13 +133,13 @@ namespace survivez.Controllers
 				CheckJumpButton();
 			}
 
-			if ( Input.Pressed(InputButton.Flashlight))
+			if ( Host.IsServer && Input.Pressed(InputButton.Flashlight))
 			{
 				var medkit = Game.Create<Medkit>();
 				var player = this.Pawn as SPlayer;
 				medkit.Owner = player;
 				medkit.ItemDrop(player, Position + (Vector3.Up * BodyHeight * 1.5f), Rotation);
-
+				(player.Animator as SPlayerAnimator).Throw();
 			}
 
 			// Fricion is handled before we add in any base velocity. That way, if we are on a conveyor, 
