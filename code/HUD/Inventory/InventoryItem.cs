@@ -8,25 +8,41 @@ namespace survivez.HUD.Inventory
 	// https://github.com/Facepunch/sandbox/blob/master/code/ui/InventoryIcon.cs
 	public class InventoryItem : Panel
 	{
-		public Entity TargetEnt;
-		public Label Label;
+		public Entity Item;
+		public Panel NamePanel;
+		public Label Name;
+		public Panel NumberPanel;
 		public Label Number;
 
 		public InventoryItem( int i, Panel parent )
 		{
 			Parent = parent;
-			Label = Add.Label( "empty", "item-name" );
-			Number = Add.Label( $"{i}", "slot-number" );
+			SetClass( "inventory-item", true );
+			NumberPanel = AddChild<Panel>();
+			NumberPanel.SetClass( "slot-number-panel", true );
+			Number = NumberPanel.AddChild<Label>();
+			Number.SetText( $"{i}" );
+			Number.SetClass( "slot-number", true );
+
+			NamePanel = AddChild<Panel>();
+			NamePanel.SetClass( "item-name-panel", true );
+			Name = NamePanel.AddChild<Label>();
+			Name.SetText( "Item goes here" );
+			Name.SetClass( "item-name", true );
 		}
 
 		public void Activate()
+		{			
+			SetClass( "active", true );
+		}
+		public void DeActivate()
 		{
-			SetClass( "active", TargetEnt.IsActiveChild() );
+			RemoveClass( "active" );
 		}
 
 		public void Clear()
 		{
-			Label.Text = "";
+			//Name.SetText( "" );
 			SetClass( "active", false );
 		}
 	}
