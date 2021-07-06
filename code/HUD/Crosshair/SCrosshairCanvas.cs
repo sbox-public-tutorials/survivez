@@ -4,8 +4,8 @@ namespace survivez.HUD.Crosshair
 {
 	public partial class SCrosshairCanvas : Panel
 	{
-		public static Panel CurrentCrosshair { get; private set; }
-		public static Panel CurrentCrosshairPhysical { get; private set; }
+		public Panel CurrentCrosshair { get; private set; }
+		public Panel CurrentCrosshairPhysical { get; private set; }
 
 		public SCrosshairCanvas()
 		{

@@ -18,7 +18,7 @@ namespace survivez.HUD
 				if ( Local.Pawn is not SPlayer pawn )
 					return;
 
-				pawn.crosshairCanvas = RootPanel.AddChild<SCrosshairCanvas>();
+				pawn.CrosshairCanvas = RootPanel.AddChild<SCrosshairCanvas>();
 				RootPanel.AddChild<NameTags>();
 				RootPanel.AddChild<ChatBox>();
 				RootPanel.AddChild<VoiceList>();
