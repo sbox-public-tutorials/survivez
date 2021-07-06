@@ -43,7 +43,7 @@ namespace survivez.Controllers
 			SpawnHUD( To.Single(GetClientOwner()) );
 
 			// Needs to be last... since Weapons have UI elements.
-			Inventory = new PlayerInventory( this );
+			Inventory = new Inventory.Inventory( this );
 			Inventory.Add( new SMG(), true );
 			Inventory.Add( new Axe() );
 			Inventory.Add( new Shotgun() );

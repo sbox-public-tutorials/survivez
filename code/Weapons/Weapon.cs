@@ -146,7 +146,7 @@ namespace survivez.Weapons
 		{
 			if ( Owner != null ) return false;
 
-			if ( user.Inventory is PlayerInventory inventory )
+			if ( user.Inventory is Inventory.Inventory inventory )
 			{
 				return inventory.CanAdd( this );
 			}

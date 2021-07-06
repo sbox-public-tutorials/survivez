@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace survivez.Inventory
 {
-	public partial class PlayerInventory : BaseInventory
+	public partial class Inventory : BaseInventory
 	{
-		public PlayerInventory( SPlayer player ) : base( player )
+		public Inventory( SPlayer player ) : base( player )
 		{
 		}
 

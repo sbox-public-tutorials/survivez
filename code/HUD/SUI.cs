@@ -2,6 +2,7 @@
 using Sandbox.UI;
 using survivez.Controllers;
 using survivez.HUD.Crosshair;
+using survivez.HUD.Inventory;
 
 namespace survivez.HUD
 {
@@ -22,6 +23,7 @@ namespace survivez.HUD
 				Log.Info( "SUI - Spawning everything!" );
 				pawn.CrosshairCanvas = RootPanel.AddChild<SCrosshairCanvas>();
 				pawn.CrosshairCanvas.SetCrosshair( new SCrosshair(), new SCrosshairPhysical() );
+				RootPanel.AddChild<InventoryHand>();
 				RootPanel.AddChild<NameTags>();
 				RootPanel.AddChild<ChatBox>();
 				RootPanel.AddChild<VoiceList>();

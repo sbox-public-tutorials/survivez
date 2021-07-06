@@ -10,6 +10,8 @@ namespace survivez.Controllers
 
 		private const float lerpSpeed = 4.0f;
 
+		private const float cameraHeight = 350.0f;
+
 		private Vector3 offset;
 
 		public override void Activated()
@@ -54,7 +56,7 @@ namespace survivez.Controllers
 
 		public void ControlCamera( SPlayer pawn )
 		{
-			float distance = (250.0f + zoom) * pawn.Scale;
+			float distance = (cameraHeight + zoom) * pawn.Scale;
 
 			Vector3 mouseOffset = Screen.GetDirection( Mouse.Position ).WithZ(0);
 
