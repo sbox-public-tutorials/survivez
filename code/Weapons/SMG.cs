@@ -9,7 +9,7 @@ namespace survivez.Weapons
 
 		public override float PrimaryRate => 15.0f;
 		public override float SecondaryRate => 1.0f;
-		public override float ReloadTime => 5.0f;
+		public override float ReloadTime => 1.5f;
 
 		public override void Spawn()
 		{
@@ -56,7 +56,7 @@ namespace survivez.Weapons
 			}
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
-			CrosshairPanel?.CreateEvent( "fire" );
+			base.ShootEffects();
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )

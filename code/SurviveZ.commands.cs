@@ -26,26 +26,21 @@ namespace survivez
 			spawner.ZombieTypes = "sz_zombie_standard;";
 		}
 
-		public static Entity InternalSpawnEntity( string entName )
+		public static Entity InternalSpawnEntity( string entName, bool careAboutSpawnable = false )
 		{
 			var attribute = Library.GetAttribute( entName );
 
 			if ( attribute == null )
 			{
-				Log.Error( $"{entName}" );
 				return null;
 			}
 
-			/*
-			if ( !attribute.Spawnable )
+			if ( careAboutSpawnable && !attribute.Spawnable )
 			{
-				Log.Info( "Not Spawnable!" );
 				return null;
 			}
-			*/
 
 			var ent = Library.Create<Entity>( entName );
-			Log.Info( $"Spawned Entity {ent}!" );
 			
 			return ent;
 		}
@@ -86,6 +81,7 @@ namespace survivez
 			ent.Position = tr.EndPos;
 			ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) );
 
+			Log.Info( $"Spawned Entity `{entName}`!" );
 		}
 		[ServerCmd( "sz_ent_list" )]
 		public static void EntityList( )

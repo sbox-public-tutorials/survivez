@@ -1,6 +1,4 @@
 ﻿using Sandbox;
-using survivez.Controllers;
-using System.Linq;
 
 namespace survivez.Nav
 {
@@ -24,8 +22,8 @@ namespace survivez.Nav
 			if ( FollowTarget != null && FollowTarget.IsValid() )
 			{
 				Target = FollowTarget.Position + ((Owner.Position - FollowTarget.Position).WithZ( 0 ).Normal * Tolerance);
-				DebugOverlay.Line( FollowTarget.Position, FollowTarget.Position + ((Owner.Position - FollowTarget.Position).WithZ( 0 ).Normal * Tolerance) );
-				DebugOverlay.Axis( Target, Rotation.Identity );
+				//DebugOverlay.Line( FollowTarget.Position, FollowTarget.Position + ((Owner.Position - FollowTarget.Position).WithZ( 0 ).Normal * Tolerance) );
+				//DebugOverlay.Axis( Target, Rotation.Identity );
 			}
 			else
 			{

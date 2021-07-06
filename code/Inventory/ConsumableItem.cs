@@ -1,14 +1,10 @@
 ﻿using Sandbox;
 using survivez.Controllers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace survivez.Inventory.Items
 {
-	public partial class ConsumableItem : ModelEntity, IItem
+	public partial class ConsumableItem : BaseCarriable, IItem
 	{
 		[Net]
 		public string ItemName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
