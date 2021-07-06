@@ -1,7 +1,6 @@
 using Sandbox;
 using Sandbox.UI;
 using survivez.Controllers;
-using survivez.Entities;
 
 namespace survivez.HUD.Crosshair
 {
@@ -26,16 +25,18 @@ namespace survivez.HUD.Crosshair
 			if ( Local.Pawn is not SPlayer pawn )
 				return;
 
-			// TraceResult tr = Trace.Ray( pawn.EyePos, pawn.EyePos + Screen.GetDirection( Mouse.Position ) * 100000.0f ).Ignore( pawn ).Run();
-			// Vector3 mousePosition = tr.EndPos.WithZ(0);
-			// float dist = tr.EndPos.Distance(pawn.Position);
-			// DebugOverlay.ScreenText(1, $"{dist}");
-			//if (dist <= 150.0f)
-			// {
-			// 	DebugOverlay.ScreenText(2, $"Overriding...");
-			// 	mousePosition = pawn.Position + new Vector3( Mouse.Position.x / Screen.Width, Mouse.Position.y / Screen.Height );
-			// }
-			Vector2 trToScreen = new Vector2( Mouse.Position.x / Screen.Width, Mouse.Position.y / Screen.Height );
+			Vector2 mouseScreenPosition = new Vector2( Mouse.Position.x, Mouse.Position.y ) - new Vector2( Screen.Width/2, Screen.Height/2 );
+
+			Vector3 nextWorldSpace = pawn.EyePos + pawn.EyeRot.Forward * mouseScreenPosition.Length;
+			TraceResult tr = Trace.Ray( pawn.EyePos, nextWorldSpace ).Ignore( pawn ).Run();
+			//DebugOverlay.Line( pawn.EyePos, nextWorldSpace );
+
+			Vector2 trToScreen = tr.EndPos.WithZ( 0 ).ToScreen();
+
+			if ( !tr.Hit )
+			{
+				trToScreen = new Vector2( Mouse.Position.x / Screen.Width, Mouse.Position.y / Screen.Height );
+			}
 
 			position = trToScreen;
 			float padding = 0.01f;

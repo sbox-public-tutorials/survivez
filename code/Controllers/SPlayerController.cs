@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using survivez.Inventory.Items;
 using System;
 
 namespace survivez.Controllers
@@ -130,6 +131,15 @@ namespace survivez.Controllers
 			if ( AutoJump ? Input.Down( InputButton.Jump ) : Input.Pressed( InputButton.Jump ) )
 			{
 				CheckJumpButton();
+			}
+
+			if ( Input.Pressed(InputButton.Flashlight))
+			{
+				var medkit = Game.Create<Medkit>();
+				var player = this.Pawn as SPlayer;
+				medkit.Owner = player;
+				medkit.ItemDrop(player, Position + (Vector3.Up * BodyHeight * 1.5f), Rotation);
+
 			}
 
 			// Fricion is handled before we add in any base velocity. That way, if we are on a conveyor, 

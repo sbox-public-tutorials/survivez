@@ -4,11 +4,17 @@ using survivez.Controllers;
 using survivez.HUD.Crosshair;
 using survivez.Inventory;
 using survivez.Misc;
+using System;
 
 namespace survivez.Weapons
 {
 	public abstract partial class Weapon : BaseWeapon, IItem
 	{
+		public int CurrentClip { get; protected set; } = 0;
+		public int MaxClipSize { get; protected set; } = 0;
+		public int AmmoBag { get; protected set; } = 0;
+		public bool UnlimitedAmmo { get; protected set; } = true; 
+
 		public virtual float ReloadTime => 3.0f;
 
 		public float Zoom = 1.0f;
@@ -23,6 +29,8 @@ namespace survivez.Weapons
 
 		[Net, Predicted]
 		public TimeSince TimeSinceDeployed { get; set; }
+		public string ItemName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+		public float ItemWeight { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
 		public Panel CrosshairPhysicalPanel;
 
@@ -76,6 +84,15 @@ namespace survivez.Weapons
 
 		public virtual void OnReloadFinish()
 		{
+			if (!UnlimitedAmmo)
+			{
+				// (0 - MaxClipSize) 
+				int grabAmmo = Math.Clamp( Math.Max( AmmoBag - (CurrentClip - MaxClipSize), 0), 0, MaxClipSize );
+				CurrentClip = grabAmmo;
+				AmmoBag -= grabAmmo;
+				if (AmmoBag < 0)
+					AmmoBag = 0;
+			}
 			IsReloading = false;
 		}
 
@@ -105,6 +122,11 @@ namespace survivez.Weapons
 
 				ViewModelEntity.SetModel( ViewModelPath );
 			}
+		}
+
+		public override bool CanPrimaryAttack()
+		{
+			return base.CanPrimaryAttack() && (UnlimitedAmmo || CurrentClip > 0);
 		}
 
 		public virtual bool OnUse( Entity user )
@@ -157,14 +179,6 @@ namespace survivez.Weapons
 		{
 			Host.AssertClient();
 
-			Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-			if ( IsLocalPawn )
-			{
-				_ = new Sandbox.ScreenShake.Perlin();
-			}
-
-			ViewModelEntity?.SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "fire" );
 			CrosshairPhysicalPanel?.CreateEvent( "fire" );
 		}
@@ -194,12 +208,18 @@ namespace survivez.Weapons
 				//
 				using ( Prediction.Off() )
 				{
-					var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
-						.UsingTraceResult( tr )
-						.WithAttacker( Owner )
-						.WithWeapon( this );
+					if (CurrentClip > 0 || UnlimitedAmmo)
+					{
+						var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
+							.UsingTraceResult( tr )
+							.WithAttacker( Owner )
+							.WithWeapon( this );
 
-					tr.Entity.TakeDamage( damageInfo );
+						tr.Entity.TakeDamage( damageInfo );
+
+						if ( !UnlimitedAmmo )
+							CurrentClip--;
+					}
 				}
 			}
 		}
@@ -224,6 +244,16 @@ namespace survivez.Weapons
 			{
 				ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );
 			}
+		}
+
+		public void OnItemPickup( SPlayer player )
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void ItemDrop( SPlayer player, Vector3 position, Rotation direction )
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

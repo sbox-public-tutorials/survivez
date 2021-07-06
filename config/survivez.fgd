@@ -8,3 +8,73 @@
 	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 ]
 
+// 
+// survivez.Entities.RandomItemSpawnerHammer : Sandbox.Entity 
+// 
+@PointClass editormodel( "models/citizen_props/cardboardbox01.vmdl" ) 
+metadata
+{
+	entity_tool_name = "Random Item Spawner"
+	entity_tool_group = "SurviveZ"
+	entity_tool_tip = "Defines where Items will spawn."
+}
+= sz_itemspawner : "Spawns a random item in it's list."
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	itemtypes(string) : "Item Attributes" :  : ""
+	spawnradius(float) : "Spawn Radius" : 200 : ""
+	spawnrate(float) : "Spawn Rate" : 2 : ""
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+]
+
+// 
+// survivez.Entities.ResourceClusterHammer : Sandbox.Entity 
+// 
+@PointClass editormodel( "models/rust_props/rubble_piles/rubble_pile_3x3_junkyard.vmdl" ) 
+metadata
+{
+	entity_tool_name = "Random Resource Spawner"
+	entity_tool_group = "SurviveZ"
+	entity_tool_tip = "Defines where Resource will spawn."
+}
+= sz_resourcecluster : "Spawns a random Resource."
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	resourcetypes(string) : "Resource Attributes" :  : ""
+	spawnradius(float) : "Spawn Radius" : 600 : ""
+	spawnrate(float) : "Spawn Rate" : 3 : ""
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+]
+
+// 
+// survivez.Entities.ZombieSpawnerHammer : Sandbox.Entity 
+// 
+@PointClass editormodel( "models/editor/playerstart.vmdl" ) 
+metadata
+{
+	entity_tool_name = "Zombie Point"
+	entity_tool_group = "SurviveZ"
+	entity_tool_tip = "Defines where zombies will spawn."
+}
+= sz_zombiespawner : "Spawns a random item in it's list."
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	zombietypes(string) : "Zombie Attributes" :  : ""
+	spawnradius(float) : "Spawn Radius" : 600 : ""
+	spawnrate(float) : "Spawn Rate" : 3 : ""
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+]
+
+// 
+// survivez.Entities.Zombie : survivez.Entities.NPC 
+// 
+@PointClass = sz_zombie_standard : "Standard Zombie."
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+]
+

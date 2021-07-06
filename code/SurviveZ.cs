@@ -79,14 +79,6 @@ namespace survivez
 			return true;
 		}
 
-		[ServerCmd( "spawn_zombie" )]
-		public static void SpawnZombie()
-		{
-			ZombieSpawner spawner = new()
-			{
-				Position = new Vector3( -290.21f, -2426.63f, 0.03f )
-			};
-		}
 	}
 
 }

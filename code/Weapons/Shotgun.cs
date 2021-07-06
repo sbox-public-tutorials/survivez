@@ -68,12 +68,13 @@ namespace survivez.Weapons
             Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
             ViewModelEntity?.SetAnimBool( "fire_double", true );
-            CrosshairPanel?.CreateEvent( "fire" );
 
-            if ( IsLocalPawn )
+			if ( IsLocalPawn )
             {
                 new Sandbox.ScreenShake.Perlin( 3.0f, 3.0f, 3.0f );
             }
+
+			base.ShootEffects();
         }
 
         public override void OnReloadFinish()

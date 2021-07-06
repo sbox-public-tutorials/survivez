@@ -1,7 +1,6 @@
 using Sandbox;
 using Sandbox.UI;
 using survivez.Controllers;
-using survivez.Entities;
 
 namespace survivez.HUD.Crosshair
 {
