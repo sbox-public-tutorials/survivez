@@ -24,7 +24,7 @@ namespace survivez.HUD.Inventory
 			Number.SetText( $"{i}" );
 			Number.SetClass( "slot-number", true );
 
-			NamePanel = AddChild<Panel>();
+			NamePanel = AddChild<Label>();
 			NamePanel.SetClass( "item-name-panel", true );
 			Name = NamePanel.AddChild<Label>();
 			Name.SetText( "Item goes here" );

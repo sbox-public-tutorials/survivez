@@ -1,16 +1,23 @@
 ﻿using Sandbox;
+using survivez.Controllers.Animations;
 using survivez.Misc;
 using System;
 
 namespace survivez.Controllers
 {
-	public class SPlayerAnimator : PawnAnimator
+	public partial class SPlayerAnimator : PawnAnimator
 	{
 		public bool AutoResetAnim = true;
 
 		TimeSince TimeSinceFootShuffle = 60;
 
-		float duck;
+		[Net]
+		public AnimationStates AnimationState { get; set; }
+
+		public SPlayerAnimation CurrentAnimation { get; set; }
+
+		[Net]
+		bool IsDucking { get; set; }
 
 		public override void Simulate()
 		{
@@ -44,25 +51,71 @@ namespace survivez.Controllers
 
 			SetParam( "b_ducked", HasTag( "ducked" ) ); // old
 
-			if ( HasTag( "ducked" ) ) duck = duck.LerpTo( 1.0f, Time.Delta * 10.0f );
-			else duck = duck.LerpTo( 0.0f, Time.Delta * 5.0f );
+			var shouldDuck = HasTag( "ducked" );
+			if (shouldDuck && !IsDucking)
+			{
+				IsDucking = true;
+				Animate(AnimationStates.Ducking);
+			} else if (IsDucking && !shouldDuck)
+			{
+				StopAnimation();
+				IsDucking = false;
+			}
 
-			SetParam( "duck", duck );
 
-			if ( Pawn.ActiveChild is BaseCarriable carry )
+			CheckAnimation();
+
+			var canSimulateCarry = CurrentAnimation?.AllowCarry ?? true;
+			if ( Pawn.ActiveChild is BaseCarriable carry && canSimulateCarry )
 			{
 				carry.SimulateAnimator( this );
 			}
-			else
+
+			if ( CurrentAnimation?.IsPlaying ?? false )
+			{				
+				CurrentAnimation.Simulate();
+			}
+		}
+
+
+		public void CheckAnimation()
+		{
+			if ( AnimationState != (CurrentAnimation?.AnimationState ?? 0) )
 			{
-				if ( AutoResetAnim )
-				{
-					SetParam( "holdtype", 0 );
-					SetParam( "aimat_weight", 0.5f ); // old
-					SetParam( "aim_body_weight", 0.5f );
-				}
+				StartAnimation( AnimationState );
+			}
+		}
+
+		public void StopAnimation()
+		{
+			if ( CurrentAnimation != null )
+			{
+				CurrentAnimation.Stop();
+			}
+		}
+
+		public void Animate( AnimationStates id )
+		{
+			AnimationState = id;
+		}
+
+		public void StartAnimation( AnimationStates id )
+		{
+			if ( CurrentAnimation != null )
+			{
+				CurrentAnimation.Stop();
 			}
 
+			CurrentAnimation = SPlayerAnimation.CreateAnimation( id );
+			if ( CurrentAnimation != null )
+			{
+				CurrentAnimation.Start( this );
+			}
+		}
+
+		public void Throw()
+		{
+			Animate(AnimationStates.Throwing);
 		}
 
 		public virtual void DoRotation( Rotation idealRotation )
@@ -126,47 +179,7 @@ namespace survivez.Controllers
 			}
 		}
 
-		public void Throw()
-		{
-			Log.Info( "Throw!" );
-			
-			int holdType = AnimPawn.GetAnimInt( "holdtype" );
-			Entity currentWeapon = null;
-			if (Pawn.Inventory != null)
-			{
-				currentWeapon = Pawn.Inventory.Active;
-				Pawn.ActiveChild = null;
-			}
-
-			AutoResetAnim = false;
-
-			Timer.Frame( () =>
-			{
-				if ( AnimPawn != null )
-				{
-					AnimPawn.SetAnimInt( "holdtype", 4 );
-					SetParam( "aimat_weight", 1.0f );
-					AnimPawn.SetAnimInt( "holdtype_handedness", 2 );
-					AnimPawn.SetAnimBool( "b_attack", true );
-					// We need to delay this...
-					Timer.Simple( 1.5f * Timer.Second, () =>
-					{
-
-						if ( AnimPawn != null )
-						{
-							if ( currentWeapon != null )
-							{
-								Pawn.ActiveChild = currentWeapon;
-							}
-
-							AutoResetAnim = true;
-
-							AnimPawn.SetAnimInt( "holdtype", holdType );
-						}
-					} );
-				}
-			} );
-		}
+		
 
 		public override void OnEvent( string name )
 		{

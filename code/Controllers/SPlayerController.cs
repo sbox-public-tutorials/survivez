@@ -139,7 +139,10 @@ namespace survivez.Controllers
 				var player = this.Pawn as SPlayer;
 				medkit.Owner = player;
 				medkit.ItemDrop(player, Position + (Vector3.Up * BodyHeight * 1.5f), Rotation);
-				(player.Animator as SPlayerAnimator).Throw();
+				var animator = (player.Animator as SPlayerAnimator);
+				if ( animator.AnimationState == AnimationStates.Base ) { 
+					animator.Throw();
+				}
 			}
 
 			// Fricion is handled before we add in any base velocity. That way, if we are on a conveyor, 
