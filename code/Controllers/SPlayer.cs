@@ -86,7 +86,6 @@ namespace survivez.Controllers
 				info.Damage *= 10.0f;
 			}
 			*/
-			Log.Info( $"Player Health: {Health} | {info.Damage}" );
 			lastDamage = info;
 
 			TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );

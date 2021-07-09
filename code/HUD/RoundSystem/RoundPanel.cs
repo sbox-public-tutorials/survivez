@@ -46,19 +46,18 @@ namespace survivez.HUD
 				var now = Time.Now;
 				var timeLeft = player.PhaseEndTime - now;
 				var totalDuration = player.PhaseEndTime - player.PhaseStartTime;
-				var difference = totalDuration - timeLeft;
-				var phaseName = "Warm Up";
+				var phaseName = "error";
 				var percentage = 0f;
 				if ( totalDuration > 0 )
 				{
 					percentage = timeLeft / totalDuration;
 				}
 
-				if ( player.CurrentPhase == 1 )
+				if ( player.CurrentPhase == 0 )
 				{
 					phaseName = "Preparation";
 				}
-				else if ( player.CurrentPhase == 2 )
+				else if ( player.CurrentPhase == 1 )
 				{
 					phaseName = "Defending";
 				}

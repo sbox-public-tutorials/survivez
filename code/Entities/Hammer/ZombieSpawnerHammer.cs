@@ -25,9 +25,11 @@ namespace survivez.Entities
 			if ( roundSystem.CurrentPhase == (int)RoundPhase.Defending )
 			{
 				lastSpawn += Time.Delta;
-				if ( lastSpawn > spawnDelay )
+				var spawnDelay = GetSpawnDelay();
+				if ( lastSpawn > spawnDelay)
 				{
-					for ( var i = 0; i < SpawnRate; i++ )
+					var spawnRate = GetSpawnRate();
+					for ( var i = 0; i < spawnRate; i++ )
 					{
 						SpawnResource();
 					}
@@ -36,12 +38,25 @@ namespace survivez.Entities
 			}
 		}
 
+		public float GetSpawnDelay()
+		{
+			return spawnDelay / SurviveZ.GetCurrentDifficulty().Clamp(0,10);
+		}
+
+		public float GetSpawnRate()
+		{
+			return SpawnRate;
+		}
+
 		public Entity SpawnResource()
 		{
 			Vector3 spawnPosition = this.Position + new Vector3( Rand.Float( -SpawnRadius, SpawnRadius ), Rand.Float( -SpawnRadius, SpawnRadius ), 0 );
 
 			if ( !SurviveZ.CanSpawnZombie() )
+			{
 				return null;
+			}
+				
 
 			string[] types = ZombieTypes.Split( ";" );
 

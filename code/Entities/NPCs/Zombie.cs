@@ -2,6 +2,7 @@ using Sandbox;
 using System.Linq;
 using survivez.Nav;
 using survivez.Controllers;
+using survivez.Misc;
 
 namespace survivez.Entities
 {
@@ -17,19 +18,24 @@ namespace survivez.Entities
 		public Entity TargetEnemy { get; private set; }
 		public float MinDamage { get; set; } = 5.0f;
 		public float MaxDamage { get; set; } = 10.0f;
-		public float SearchRadius { get; set; } = 2000;
+		public float SearchRadius { get; set; } = 1000f;
+
+		public static Vector3 CenterPosition = new Vector3(0,0,50);
 
 		public float AttackRadius { get; set; } = 60.0f;
 		public float lastAttackTime;
 		public float AttackDelay { get; set; } = 1.0f;
+		public float RandomDeathTime { get; set; }
 
 		public Zombie() : base()
 		{
 			Steer = new Follow( this, null );
-			this.SetAnimInt( "holdtype", 4 );
-			this.SetAnimInt( "holdtype_handedness", 0 );
-			this.SetAnimFloat( "aimat_weight", 1.0f );
-			this.RenderColor = Color.Green;
+			SetAnimInt( "holdtype", 4 );
+			SetAnimInt( "holdtype_handedness", 0 );
+			SetAnimFloat( "aimat_weight", 1.0f );
+			RenderColor = Color.Green;
+			var rnd = new System.Random();
+			RandomDeathTime = ((float)rnd.NextDouble() * 5f) + 5f;
 		}
 
 		public void SetDestination(Vector3 _position)
@@ -37,9 +43,32 @@ namespace survivez.Entities
 			Steer.Target = _position;
 		}
 
+		public override void TakeDamage( DamageInfo info )
+		{
+			lastAttackTime = -AttackDelay;
+			base.TakeDamage( info );
+		}
+
 		public override void Think()
 		{
 			lastAttackTime += Time.Delta;
+
+			var phase = SurviveZ.GetRoundPhase();
+			if ( phase == Misc.RoundPhase.Preparing )
+			{
+				if ( RandomDeathTime == 0)
+				{
+					RandomDeathTime = 5f;
+				}
+				TakeDamage( new DamageInfo() { Damage = RandomDeathTime * Time.Delta, Flags = DamageFlags.Burn } );
+			}
+			if (this.Position.z < -500)
+			{
+				Suicide();
+			}
+
+			SetAnimInt( "holdtype_handedness", 0 );
+
 
 			// Ensure that the enemy isn't too far from us.
 			if (TargetEnemy != null && TargetEnemy.IsValid() )
@@ -47,6 +76,8 @@ namespace survivez.Entities
 				float dist = TargetEnemy.Position.Distance( Position );
 				if ( dist > (SearchRadius * 1.2f) )
 				{
+					
+					SetAnimFloat( "holdtype_pose_hand", 0.06f );
 					TargetEnemy = null;
 					(Steer as Follow).FollowTarget = null;
 				}
@@ -65,16 +96,26 @@ namespace survivez.Entities
 			if (TargetEnemy != null && TargetEnemy.IsValid())
 			{
 				(Steer as Follow).FollowTarget = TargetEnemy;
+			} else
+			{
+				SetDestination( CenterPosition );
 			}
+		}
+
+		public void Suicide()
+		{
+			TakeDamage( new DamageInfo() { Damage = Health + 1, Flags = DamageFlags.Burn } );
 		}
 
 		public void Attack()
 		{
 			float Damage = Rand.Float( MinDamage, MaxDamage );
+			SetAnimFloat( "holdtype_pose_hand", 0f );
 			if ( lastAttackTime > AttackDelay )
 			{
-				this.SetAnimBool( "b_attack", true );
-				//if (TargetEnemy.Position.Distance( Position ) <= 65)
+				SetAnimInt( "holdtype_handedness", SRandom.Int(0,3) );
+				SetAnimFloat( "holdtype_attack", SRandom.Float( 0, 8 ) );
+				SetAnimBool( "b_attack", true );
 				{
 					TargetEnemy.TakeDamage( new DamageInfo() { Damage = Damage, Attacker = this, Flags = DamageFlags.Blunt } );
 				}
@@ -96,7 +137,6 @@ namespace survivez.Entities
 				float dist = player.Position.Distance( Position );
 				if ( dist > SearchRadius ) continue;
 				if ( dist > lastNearestTarget ) continue;
-				//Log.Info($"Zombie Scanning : {player} | {dist}");
 				target = player;
 				lastNearestTarget = dist;
 			}

@@ -4,8 +4,8 @@ namespace survivez.Misc
 
 	public enum RoundPhase : byte
 	{
-		Preparing = 1,
-		Defending = 2,
+		Preparing = 0,
+		Defending = 1,
 	}
 
 	public partial class RoundSystem
@@ -26,7 +26,7 @@ namespace survivez.Misc
 		public virtual void Initialise()
 		{
 			CurrentPhase = 0;
-			CurrentRound = 0;
+			CurrentRound = 1;
 		}
 
 		public float GetPhaseDuration( int id )
@@ -44,14 +44,14 @@ namespace survivez.Misc
 		public void NextPhase()
 		{
 			OnPhaseEnd( CurrentPhase );
+			CurrentPhase = CurrentPhase + 1;
 			if ( CurrentPhase >= TotalPhases )
 			{
 				NextRound();
 			}
 			else
 			{
-				var phaseDuration = GetPhaseDuration( CurrentPhase );
-				CurrentPhase = CurrentPhase + 1;
+				var phaseDuration = GetPhaseDuration( CurrentPhase );				
 				StartTime = Time.Now;
 				EndTime = Time.Now + phaseDuration;
 				OnPhaseStart( CurrentPhase );

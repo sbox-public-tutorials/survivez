@@ -35,7 +35,7 @@ namespace survivez.Entities
 
 		public override void OnKilled()
 		{
-			BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
+			BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force * lastDamage.Damage * 2, GetHitboxBone( lastDamage.HitboxIndex ) );
 
 			base.OnKilled();
 

@@ -3,6 +3,7 @@ using Sandbox;
 using survivez.Controllers;
 using survivez.Entities;
 using survivez.Misc;
+using System;
 using System.Linq;
 
 namespace survivez
@@ -86,6 +87,24 @@ namespace survivez
 			}
 		}
 
+		public static RoundPhase GetRoundPhase()
+		{
+			var phase = (byte)SurviveZ.Game?.RoundSystem?.CurrentPhase;
+
+			return (RoundPhase)Enum.Parse( typeof( RoundPhase ), phase.ToString() );
+		}
+
+		public static int GetRound()
+		{
+			return SurviveZ.Game?.RoundSystem?.CurrentRound ?? 0;
+		}
+
+		public static int GetCurrentDifficulty()
+		{
+			return GetRound() + 1;
+		}
+
+
 		[Event.Tick.Client]
 		public void ClientTick()
 		{
@@ -97,7 +116,10 @@ namespace survivez
 
 		public static bool CanSpawnZombie()
 		{
-			if ( Entity.All.OfType<Zombie>().ToArray().Length >= 40 )
+			var zombieCount = Entity.All.OfType<Zombie>().Where( zombie => zombie.Health > 0 ).ToArray().Length;
+			var maxZombies = (GetRound() * 2) + 2;
+
+			if ( zombieCount >= maxZombies )
 			{
 				return false;
 			}
