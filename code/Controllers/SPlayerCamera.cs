@@ -4,6 +4,7 @@ namespace survivez.Controllers
 {
 	class SPlayerCamera : Camera
 	{
+		private float zoomSpeed = 5f;
 		private float zoom = 0.0f;
 		private const float zoomMin = -15.0f;
 		private const float zoomMax = 120.0f;
@@ -50,7 +51,8 @@ namespace survivez.Controllers
 
 		public void HandleZoom()
 		{
-			zoom -= Input.MouseWheel;
+			zoomSpeed = 5f;
+			zoom -= Input.MouseWheel * zoomSpeed;
 			zoom = MathX.Clamp( zoom, zoomMin, zoomMax );
 		}
 
@@ -65,7 +67,7 @@ namespace survivez.Controllers
 			Vector3 lookOffset = mouseToLocal;
 
 
-			Vector3 niceFeelOffset = (Vector3.Up * distance) + (Vector3.Forward * -distance/3);
+			Vector3 niceFeelOffset = (Vector3.Up * distance) + (Vector3.Forward * -distance/2.2f);
 			Vector3 center = pawn.Position + niceFeelOffset;
 
 			float weaponZoom = 1.0f;

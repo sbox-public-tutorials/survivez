@@ -12,7 +12,7 @@ namespace survivez.Entities
 		public string ResourceTypes { get; set; }
 		[Property( Title = "Spawn Radius" )]
 		public float SpawnRadius { get; set; } = 600.0f;
-		[Property( Title = "Spawn Rate" )]
+		[Property( Title = "Spawn Rates" )]
 		public float SpawnRate { get; set; } = 3;
 
 		private const float spawnDelay = 1.0f;

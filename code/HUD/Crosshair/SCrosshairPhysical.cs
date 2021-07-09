@@ -31,7 +31,7 @@ namespace survivez.HUD.Crosshair
 			TraceResult tr = Trace.Ray( pawn.EyePos, nextWorldSpace ).Ignore( pawn ).Run();
 			//DebugOverlay.Line( pawn.EyePos, nextWorldSpace );
 
-			Vector2 trToScreen = tr.EndPos.WithZ( 0 ).ToScreen();
+			Vector2 trToScreen = tr.EndPos.WithZ( pawn.EyePos.z ).ToScreen();
 
 			if ( !tr.Hit )
 			{

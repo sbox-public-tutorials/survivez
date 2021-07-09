@@ -17,7 +17,7 @@ namespace survivez.Entities
 		public Entity TargetEnemy { get; private set; }
 		public float MinDamage { get; set; } = 5.0f;
 		public float MaxDamage { get; set; } = 10.0f;
-		public float SearchRadius { get; set; } = 800;
+		public float SearchRadius { get; set; } = 2000;
 
 		public float AttackRadius { get; set; } = 60.0f;
 		public float lastAttackTime;

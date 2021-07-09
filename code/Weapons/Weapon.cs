@@ -15,7 +15,7 @@ namespace survivez.Weapons
 		public int AmmoBag { get; protected set; } = 0;
 		public bool UnlimitedAmmo { get; protected set; } = true; 
 
-		public virtual float ReloadTime => 3.0f;
+		public virtual float ReloadTime => 1.0f;
 
 		public float Zoom = 1.0f;
 
@@ -44,6 +44,7 @@ namespace survivez.Weapons
 				Position = Position,
 				EnableTouch = true
 			};
+
 		}
 
 		public override void ActiveStart( Entity ent )
@@ -64,6 +65,11 @@ namespace survivez.Weapons
 			(Owner as AnimEntity)?.SetAnimBool( "b_reload", true );
 
 			StartReloadEffects();
+		}
+
+		public void PlayAnimation()
+		{
+
 		}
 
 		public override void Simulate( Client owner )

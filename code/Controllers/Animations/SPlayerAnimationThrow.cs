@@ -11,14 +11,13 @@ namespace survivez.Controllers.Animations
 		{
 			AnimationState = AnimationStates.Throwing;
 			Interruptable = false;
-			Duration = 0.25f;
+			Duration = 0.5f;
 			AllowCarry = false;
 		}
 
 		// This is what happens when the "animation" starts.
 		public override void OnStart()
 		{
-			Log.Info( "START" );
 			var pawn = GetPawn();
 			if ( pawn?.Inventory != null )
 			{
@@ -26,11 +25,10 @@ namespace survivez.Controllers.Animations
 				pawn.ActiveChild = null;
 			}
 
-			SetAnimInt( "holdtype_attack", 1);
+			SetAnimInt( "holdtype_hand", 2);
+			SetAnimFloat( "holdtype_attack", 4);
 			SetAnimInt( "holdtype", 4 );
-			SetAnimFloat( "aimat_weight", 1.0f );
-			SetAnimFloat( "duck", 1f );
-			SetAnimInt( "holdtype_handedness", 5 );
+			SetAnimInt( "holdtype_handedness", 1 );
 			SetAnimBool( "b_attack", true );
 		}
 

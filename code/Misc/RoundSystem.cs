@@ -6,7 +6,6 @@ namespace survivez.Misc
 	{
 		Preparing = 1,
 		Defending = 2,
-
 	}
 
 	public partial class RoundSystem
@@ -89,6 +88,10 @@ namespace survivez.Misc
 			}
 		}
 
+		public bool IsPhase(RoundPhase phase)
+		{
+			return CurrentPhase == (int)phase;
+		}
 
 		public void Tick( float delta )
 		{
