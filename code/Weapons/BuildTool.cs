@@ -1,9 +1,8 @@
 using Sandbox;
-using survivez.Inventory;
 
 namespace survivez.Weapons
 {
-    public partial class Shotgun : Weapon
+    public partial class BuildTool : Weapon
     {
         // public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
         public override float PrimaryRate => 1;
@@ -15,7 +14,7 @@ namespace survivez.Weapons
             base.Spawn();
 			Zoom = 1000.0f;
 
-			SetModel( "Content/models/survivez/weapons/shotgun/shotgun.vmdl" );
+			SetModel( "models/citizen_props/crowbar01.vmdl" );
         }
 
         public override void AttackPrimary()
@@ -29,12 +28,11 @@ namespace survivez.Weapons
             // Tell the clients to play the shoot effects
             //
             ShootEffects();
-            PlaySound( "rust_pumpshotgun.shoot" );
 
             //
             // Shoot the bullets
             //
-            ShootBullets( 10, 0.5f, 10.0f, 9.0f, 3.0f );
+            ShootBullets( 1, 0f, 100f, 100.0f, 100f );
         }
 
         public override void AttackSecondary()
@@ -47,9 +45,6 @@ namespace survivez.Weapons
         {
             Host.AssertClient();
 
-            Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-            Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
-
             ViewModelEntity?.SetAnimBool( "fire", true );
 
             if ( IsLocalPawn )
@@ -57,25 +52,14 @@ namespace survivez.Weapons
                 new Sandbox.ScreenShake.Perlin( 1.0f, 1.5f, 2.0f );
             }
 
-            CrosshairPanel?.CreateEvent( "fire" );
-        }
-
-        [ClientRpc]
-        protected virtual void DoubleShootEffects()
-        {
-            Host.AssertClient();
-
-            Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-            ViewModelEntity?.SetAnimBool( "fire_double", true );
-
-			if ( IsLocalPawn )
-            {
-                new Sandbox.ScreenShake.Perlin( 3.0f, 3.0f, 3.0f );
-            }
-
 			base.ShootEffects();
         }
+
+        public override void Reload()
+        {
+            return;
+        }
+
 
         public override void OnReloadFinish()
         {
@@ -83,19 +67,11 @@ namespace survivez.Weapons
 
             TimeSincePrimaryAttack = 0;
             TimeSinceSecondaryAttack = 0;
-
-            FinishReload();
-        }
-
-        [ClientRpc]
-        protected virtual void FinishReload()
-        {
-            ViewModelEntity?.SetAnimBool( "reload_finished", true );
         }
 
         public override void SimulateAnimator( PawnAnimator anim )
         {
-            anim.SetParam( "holdtype", 3 ); // TODO this is shit
+            anim.SetParam( "holdtype", 2 ); // TODO this is shit
             anim.SetParam( "aimat_weight", 1.0f );
         }
     }

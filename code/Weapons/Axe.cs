@@ -33,7 +33,7 @@ namespace survivez.Weapons
             //
             // Shoot the bullets
             //
-            ShootBullets( 10, 0.1f, 10.0f, 9.0f, 3.0f );
+            ShootBullets( 1, 0f, 100f, 100.0f, 100f );
         }
 
         public override void AttackSecondary()

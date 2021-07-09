@@ -44,7 +44,8 @@ namespace survivez.Controllers
 
 			// Needs to be last... since Weapons have UI elements.
 			Inventory = new Inventory.Inventory( this );
-			Inventory.Add( new SMG(), true );
+			Inventory.Add( new BuildTool(), true );
+			Inventory.Add( new SMG() );
 			Inventory.Add( new Axe() );
 			Inventory.Add( new Shotgun() );
 

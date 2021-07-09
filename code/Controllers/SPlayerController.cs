@@ -1,5 +1,7 @@
 ﻿using Sandbox;
+using survivez.Entities;
 using survivez.Inventory.Items;
+using survivez.Weapons;
 using System;
 
 namespace survivez.Controllers
@@ -32,6 +34,10 @@ namespace survivez.Controllers
 		public float AirControl { get; set; } = 30.0f;
 		public bool Swimming { get; set; } = false;
 		public bool AutoJump { get; set; } = false;
+
+
+		public bool IsBuilding { get; set; }
+		public Baracade Building { get; set; }
 
 		public Duck Duck;
 		public Unstuck Unstuck;
@@ -228,6 +234,28 @@ namespace survivez.Controllers
 				DebugOverlay.ScreenText( lineOffset + 3, $"    GroundEntity: {GroundEntity} [{GroundEntity?.Velocity}]" );
 				DebugOverlay.ScreenText( lineOffset + 4, $" SurfaceFriction: {SurfaceFriction}" );
 				DebugOverlay.ScreenText( lineOffset + 5, $"    WishVelocity: {WishVelocity}" );
+			}
+
+
+			// To move this elsewhere
+
+			var isBuilding = false;
+			if (Pawn?.ActiveChild is BuildTool)
+			{
+				isBuilding = true;
+			}
+			if ( Building == null && isBuilding ) {
+				Building = Game.Create<Baracade>();
+			}
+
+			if ( Building != null ) {
+				Building.Rotation = Pawn.Rotation;
+				Building.Position = Pawn.Position + (Pawn.Rotation.Forward * 128);
+				if ( !isBuilding )
+				{
+					Building.Delete();
+					Building = null;
+				}
 			}
 
 		}

@@ -25,7 +25,7 @@ namespace survivez.Misc
 
 		public virtual void Initialise()
 		{
-			CurrentPhase = 0;
+			CurrentPhase = -1;
 			CurrentRound = 1;
 		}
 

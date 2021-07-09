@@ -44,11 +44,6 @@ namespace survivez.HUD.Inventory
 			if ( Input.Pressed( InputButton.Slot2 ) ) SetClientActiveSlot(  1 );
 			if ( Input.Pressed( InputButton.Slot3 ) ) SetClientActiveSlot(  2 );
 			if ( Input.Pressed( InputButton.Slot4 ) ) SetClientActiveSlot(  3 );
-			if ( Input.Pressed( InputButton.Slot5 ) ) SetClientActiveSlot(  4 );
-			if ( Input.Pressed( InputButton.Slot6 ) ) SetClientActiveSlot(  5 );
-			if ( Input.Pressed( InputButton.Slot7 ) ) SetClientActiveSlot(  6 );
-			if ( Input.Pressed( InputButton.Slot8 ) ) SetClientActiveSlot(  7 );
-			if ( Input.Pressed( InputButton.Slot9 ) ) SetClientActiveSlot(  8 );
 		}
 
 		public IBaseInventory GetInventory()
